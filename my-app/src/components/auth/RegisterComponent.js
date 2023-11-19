@@ -10,7 +10,7 @@ export default function Register() {
 
   const { getError, cleanError } = useContext(ErrorContext);
 
-  const { register,addUser } = useContext(DataContext);
+  const { register,dispatch } = useContext(DataContext);
 
   const [values, setValues] = useState({
     email: '',
@@ -19,6 +19,8 @@ export default function Register() {
     password: '',
     repass: '',
   });
+
+
 
   const navigate = useNavigate();
 
@@ -82,8 +84,8 @@ export default function Register() {
     }
 
     try {
-      const user = await register(values);
-      addUser(user);
+      const result = await register(values);
+      dispatch({ type: 'USER', user: result });
       onRegisterSubmit();
       navigate('/');
     } catch (error) {

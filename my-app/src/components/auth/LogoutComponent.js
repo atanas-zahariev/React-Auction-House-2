@@ -7,7 +7,7 @@ import { DataContext } from '../../contexts/DataContext';
 export default function Logout() {
     const { onLogout } = useContext(AuthContext);
 
-    const { logout } = useContext(DataContext);
+    const { logout,dispatch } = useContext(DataContext);
 
     const navigate = useNavigate();
 
@@ -15,6 +15,7 @@ export default function Logout() {
         async function fetchData() {
             await logout();
         }
+        dispatch({type:'LOGOUT',user:''});
         fetchData();
         onLogout();
         navigate('/');

@@ -1,29 +1,44 @@
-// import { useContext, useEffect, useState } from 'react';
-// import { DataContext } from '../contexts/DataContext';
-// import { useApi } from '../services/dataService';
+import { useEffect, useReducer } from 'react';
+import { useApi } from '../services/dataService';
 
-// // import { useFetch } from './useFetch';
-// export const useDataHook = (data) => {  
-//    const { getAllDataInSystem } = useApi();   
-//    const [_items, setItems] = useState({});
-//    const [initial, setInitial] = useState(0);
+const initial = {};
 
-//    useEffect(() => {
-//       if(initial === 0){
-//          console.log('if');
-//          setItems(items => ({ ...items, ...data }));
-//          setInitial(1);
-//       }else{
-//          console.log('else');
-//          getAllDataInSystem().then(result => setItems(items => ({ ...items, ...result })));
-//       }
-//       // eslint-disable-next-line
-//    }, []);
+function catalogReducer(x, action) {
+    switch (action.type) {
+        case 'FETCH_SUCCESS': {
+            return { ...action.result };
+        }
+        default: {
+            throw Error('Unknown action: ' + action.type);
+        }
+    }
+}
 
-//    // console.log(incoming);
-//    return {
-//       _items,
-//       initial
-//    };
+export const useDataHook = () => {
+    const { getAllDataInSystem } = useApi();
+    const [_items, dispatch] = useReducer(catalogReducer, initial);
 
-// };
+    useEffect(() => {
+        const controller = new AbortController();
+        const signal = controller.signal;
+        const fetch = async () => {
+            try {
+                const result = await getAllDataInSystem(signal);
+                dispatch({ type: 'FETCH_SUCCESS', result });
+            } catch (error) {
+                console.log(error.message);
+            }
+        };
+        fetch();
+
+        return () => {
+            controller.abort();
+        };
+
+        // eslint-disable-next-line     
+    }, []);
+
+    return {
+        _items
+    };
+};

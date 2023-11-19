@@ -5,21 +5,21 @@ import NotOwner from './NotOwnerComponent';
 import Owner from './OwnerComponent';
 
 import { ErrorContext } from '../../contexts/ErrorContext';
-import { useDetailsHook } from '../../hooks/detailsHook';
+// import { useDetailsHook } from '../../hooks/detailsHook';
+import { DataContext } from '../../contexts/DataContext';
 
 export default function Details() {
     const { cleanError } = useContext(ErrorContext);
 
     const { id } = useParams();
 
-    const{_item,setNewState,offer} = useDetailsHook(id);
-
     useEffect(() => {
         cleanError();
         // eslint-disable-next-line
-    }, []);
+    }, []);  
 
-    console.log('Details is re-render');
+    const {getItem} = useContext(DataContext);
+    const _item = getItem(id);
 
     if (_item.item) {
         const isOwner = _item.item.owner === _item.user?._id;
@@ -29,7 +29,7 @@ export default function Details() {
             );
         }
         return (
-            <NotOwner item={_item} setNewState={setNewState} offer={offer} />
+            <NotOwner item={_item} id={id}/>
         );
 
     }

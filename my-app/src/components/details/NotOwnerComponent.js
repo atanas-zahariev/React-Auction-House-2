@@ -2,20 +2,23 @@ import { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { ErrorContext } from '../../contexts/ErrorContext';
+import { useApi } from '../../services/dataService';
+import { DataContext } from '../../contexts/DataContext';
 
-export default function NotOwner({ item , setNewState,offer}) {    
+export default function NotOwner({ item, id }) {
     console.log('NotOwner is re-render');
-
+    const { offer } = useApi();
+    const { dispatch } = useContext(DataContext);
     const { user } = item;
 
     const { title, imgUrl, category, description, price, bider, _id } = item.item;
-    
+
     const { getError, cleanError } = useContext(ErrorContext);
-    
+
     const navigate = useNavigate();
-    
+
     const currentUser = user?._id;
-    
+
     const isBider = bider?._id === currentUser;
 
     const [newOffer, setOffer] = useState({
@@ -41,8 +44,8 @@ export default function NotOwner({ item , setNewState,offer}) {
 
         try {
             item.item.price = Number(newOffer.price);
-            const result = await offer(_id, item.item); 
-            setNewState(result);       
+            const result = await offer(_id, item.item);
+            dispatch({ type: 'UPDATE_BIDER', id: id, updatedItem: result.updatedItem });
             cleanError();
             navigate(`/details/${_id}`);
         } catch (error) {

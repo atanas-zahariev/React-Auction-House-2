@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { AuthContext } from '../../contexts/AuthContext';
@@ -7,9 +7,11 @@ import { DataContext } from '../../contexts/DataContext';
 
 export default function Login() {
     const { onLoginSubmit } = useContext(AuthContext);
-    const { getError,cleanError} = useContext(ErrorContext);
-    const {login} = useContext(DataContext);
-    const [values, setValues] = useState({
+    const { getError, cleanError } = useContext(ErrorContext);
+    const { login, dispatch } = useContext(DataContext);
+
+
+    const values = useRef({
         email: '',
         password: ''
     });
@@ -17,27 +19,27 @@ export default function Login() {
     const navigate = useNavigate();
 
     useEffect(() => {
-
         cleanError();
         // eslint-disable-next-line
-    },[]);
-        
-        
+    }, []);
+
+
 
     function getFormValue(e) {
-        setValues(state => ({ ...state, [e.target.name]: e.target.value }));
+        values.current[e.target.name] = e.target.value;
     }
 
     async function onSubmit(e) {
         e.preventDefault();
 
-        if(Object.values(values).some(x => !x)){
+        if (Object.values(values.current).some(x => !x)) {
             getError(['All fields are required']);
             return;
-        } 
+        }
 
         try {
-            await login(values);
+            const result = await login(values.current);
+            dispatch({ type: 'USER', user: result });
             onLoginSubmit();
             navigate('/');
         } catch (error) {

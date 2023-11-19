@@ -36,8 +36,8 @@ export const useApi = () => {
         return result;
     }
 
-    async function getAllDataInSystem() {
-        const result = await get(endpoints.getAllDataInSistem);
+    async function getAllDataInSystem(signal) {
+        const result = await get(endpoints.getAllDataInSistem,undefined,signal);
         return result;
     }
 

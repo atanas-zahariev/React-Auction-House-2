@@ -9,7 +9,6 @@ export const useDetailsHook = (id) => {
         if (id) {
             getSpecificDataWithId(id).then(result => setItem(state => ({ ...state, ...result })));
         }
-
         // eslint-disable-next-line
     }, []);
 

@@ -1,7 +1,6 @@
 import { getUser } from '../services/utility';
 
-export const useFetch = () => {
-
+export const catalogFetch = () => {
     async function getData() {
         const option = {
             headers: {}
@@ -30,9 +29,6 @@ export const useFetch = () => {
 
             return result;            
         } catch (error) {
-            if (error[0] === 'Invalid authorization token') {
-                throw error[0];
-            }
             throw error;
         }
     }

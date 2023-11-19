@@ -8,6 +8,7 @@ import { DataProvider } from './contexts/DataContext';
 import Header from './components/common/HeaderComponents';
 import Home from './components/common/HomeComponent';
 import Error from './components/common/ErrorComponent';
+import Spinner from './components/common/Spiner';
 
 import Login from './components/auth/LoginComponent';
 import Register from './components/auth/RegisterComponent';
@@ -24,14 +25,12 @@ import UserClosedOffers from './components/closed-offers/UserClosedOffersCompone
 
 import { AuthGuard } from './guards/UserGuard';
 import { GuestGuard } from './guards/GuestGuard';
-import { useFetch } from './hooks/useFetch';
+import ErrorBoundary from './guards/errorboundary';
 
-const Catalog = lazy(() => import('./components/Catalog/CatalogComponent'));
-
+const Catalog = lazy(() => import('./components/common/Catalog/CatalogComponent'));
 
 function App() {
-  const { createResourse } = useFetch();
-  const resourse = createResourse();
+  console.log('App is re-render');
   return (
     <AuthProvider>
       <ErrorProvider>
@@ -40,27 +39,30 @@ function App() {
             <Header />
             <Error />
             <main>
-              <Suspense fallback={<h1>Data is fetching...</h1>}>
-                <Routes>
-                  <Route path='/' element={<Home />} />
-                  <Route path='/catalog' element={<Catalog resourse={resourse.data} />} />
-                  <Route path='/details/:id' element={<Details />} />
+              <ErrorBoundary fallback={<div>Failed to fetch data!</div>} >
+                <Suspense fallback={<Spinner />}>
+                  <Routes>
 
-                  <Route element={<GuestGuard />}>
-                    <Route path='/login' element={<Login />} />
-                    <Route path='/register' element={<Register />} />
-                  </Route>
+                    <Route path='/' element={<Home />} />
+                    <Route path='/catalog' element={<Catalog />} />
+                    <Route path='/details/:id' element={<Details />} />
 
-                  <Route element={<AuthGuard />}>
-                    <Route path='/logout' element={<Logout />} />
-                    <Route path='/create' element={<Create />} />
-                    <Route path='/edit/:id' element={<EditItem />} />
-                    <Route path='/userAction/:id' element={<CloseOffer />} />
-                    <Route path='/closed' element={<UserClosedOffers />} />
-                  </Route>
+                    <Route element={<GuestGuard />}>
+                      <Route path='/login' element={<Login />} />
+                      <Route path='/register' element={<Register />} />
+                    </Route>
 
-                </Routes>
-              </Suspense>
+                    <Route element={<AuthGuard />}>
+                      <Route path='/logout' element={<Logout />} />
+                      <Route path='/create' element={<Create />} />
+                      <Route path='/edit/:id' element={<EditItem />} />
+                      <Route path='/userAction/:id' element={<CloseOffer />} />
+                      <Route path='/closed' element={<UserClosedOffers />} />
+                    </Route>
+
+                  </Routes>
+                </Suspense>
+              </ErrorBoundary>
             </main>
 
             <footer>SoftUni &copy; 2022 | Design by Viktor Kostadinov</footer>

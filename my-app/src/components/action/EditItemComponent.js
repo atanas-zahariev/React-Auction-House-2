@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect,  useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import { ErrorContext } from '../../contexts/ErrorContext';
@@ -7,7 +7,7 @@ import { DataContext } from '../../contexts/DataContext';
 export default function EditItem() {
     const { getError, cleanError } = useContext(ErrorContext);
 
-    const { getSpecificDataWithId, onEdit } = useContext(DataContext);
+    const {  onEdit, dispatch, getItem } = useContext(DataContext);
 
     const { id } = useParams();
 
@@ -27,32 +27,19 @@ export default function EditItem() {
         bider: undefined
     });
 
+    
     useEffect(() => {
-
         cleanError();
+        const { item, user } = getItem(id);
+        if (!user || (user._id !== item.owner)) {
+            navigate('/login');
+            return;
+        }
+        setOldItem(item);
         // eslint-disable-next-line
     }, []);
 
 
-
-    useEffect(() => {
-        async function fetchData() {
-            try {
-                const result = await getSpecificDataWithId(id);
-                const { item, user } = result;
-                if (!user || (user._id !== item.owner)) {
-                    navigate('/login');
-                    return;
-                }
-                setOldItem(result.item);
-            } catch (error) {
-                getError(error);
-            }
-        }
-
-        fetchData();
-        // eslint-disable-next-line
-    }, [getError, id, navigate]);
 
 
 
@@ -108,7 +95,7 @@ export default function EditItem() {
 
         try {
             await onEdit(id, oldItem);
-            cleanError();
+            dispatch({ type: 'UPDATE_BIDER', id: id, updatedItem: oldItem });
             navigate(`/details/${id}`);
         } catch (error) {
             getError(error);
