@@ -1,5 +1,9 @@
 import { createContext, useEffect, useReducer } from 'react';
+
 import { useApi } from '../services/dataService';
+
+import dataReducer from '../reducers/dataReducer';
+import reducerTasks from '../reducers/reducerTasks';
 
 export const DataContext = createContext();
 
@@ -10,27 +14,9 @@ export const DataProvider = ({
     console.log('DataContext is re-render');
 
     const { getAllDataInSystem } = useApi();
+    const {getCatlogList} = reducerTasks();
     const initial = {};
-
-    function dataReducer(initial, action) {
-        switch (action.type) {
-            case 'FETCH_SUCCESS': {
-                return { ...initial, ...action.result };
-            }
-            case 'USER': {
-                return { ...initial, user: action.user };
-            }
-            case 'LOGOUT': {
-                return { items: initial.items };
-            }
-            case 'UPDATE_BIDER': {
-                return { ...initial, items: initial.items.map(x => x._id === action.id ? action.updatedItem : x) };
-            }
-            default: {
-                throw Error('Unknown action: ' + action.type);
-            }
-        }
-    }
+ 
     const [_items, dispatch] = useReducer(dataReducer, initial);
 
     useEffect(() => {
@@ -39,7 +25,7 @@ export const DataProvider = ({
         const fetch = async () => {
             try {
                 const result = await getAllDataInSystem(signal);
-                dispatch({ type: 'FETCH_SUCCESS', result });
+                getCatlogList(dispatch,result);
             } catch (error) {
                 console.log(error.message);
             }

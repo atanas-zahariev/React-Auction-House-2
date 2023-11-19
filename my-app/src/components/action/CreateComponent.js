@@ -3,13 +3,16 @@ import { useNavigate } from 'react-router-dom';
 
 import { ErrorContext } from '../../contexts/ErrorContext';
 import { DataContext } from '../../contexts/DataContext';
+import reducerTasks from '../../reducers/reducerTasks';
 
 export default function Create() {
     const { getError, cleanError } = useContext(ErrorContext);
     
     const navigate = useNavigate();
 
-    const {addInSystem} = useContext(DataContext);
+    const {addInSystem,dispatch} = useContext(DataContext);
+
+    const {createItem} = reducerTasks();
 
     const IMAGE_URL = /^https?:\/\/.*/i;
 
@@ -24,7 +27,6 @@ export default function Create() {
     });
 
     useEffect(() => {
-
         cleanError();
         // eslint-disable-next-line
     }, []);
@@ -81,8 +83,8 @@ export default function Create() {
         }
 
         try {
-            await addInSystem(values);
-            cleanError();
+            const result = await addInSystem(values);
+            createItem(dispatch,result);
             navigate('/catalog');
         } catch (error) {
             getError(error);

@@ -1,8 +1,8 @@
 import { useContext, useEffect } from 'react';
-// import { useDataHook } from '../../../hooks/dataHook';
 import { Item } from './ItemComponent';
 import { ErrorContext } from '../../../contexts/ErrorContext';
 import { DataContext } from '../../../contexts/DataContext';
+import { Link } from 'react-router-dom';
 
 export default function Follow() {
     const { cleanError } = useContext(ErrorContext);
@@ -23,7 +23,7 @@ export default function Follow() {
                 <div className="item pad-large align-center">
                     <p>Nothing has been listed yet. Be the first!</p>
                     <div>
-                        <a className="action" href="/house/create">Publish Auction</a>
+                        <Link className="action" to="/create">Publish Auction</Link>
                     </div>
                 </div>
             }

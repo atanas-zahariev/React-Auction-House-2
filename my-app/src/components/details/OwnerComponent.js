@@ -2,13 +2,14 @@ import { useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { ErrorContext } from '../../contexts/ErrorContext';
 import { DataContext } from '../../contexts/DataContext';
+import reducerTasks from '../../reducers/reducerTasks';
 //import { onDelete } from '../../services/data';
 
 export default function Owner({ item }) {
     const navigate = useNavigate();
     const{getError} = useContext(ErrorContext);
-    const {onDelete} = useContext(DataContext);
-
+    const {onDelete,dispatch} = useContext(DataContext);
+    const {deleteProduct} = reducerTasks();
 
     const { title, imgUrl, category, description, price, bider, _id,owner } = item.item;
 
@@ -25,6 +26,7 @@ export default function Owner({ item }) {
 
             if(confirmed){
                 await onDelete(_id);
+                deleteProduct(dispatch,_id);
                 navigate('/catalog');
             }
         } catch (error) {
@@ -77,7 +79,7 @@ export default function Owner({ item }) {
                 </div>
 
                 <footer>
-                    <div>Listed by {item.user.username} </div>
+                    <div>Listed by {user.username ? user.username : user.firstname} </div>
                 </footer>
             </div>
 

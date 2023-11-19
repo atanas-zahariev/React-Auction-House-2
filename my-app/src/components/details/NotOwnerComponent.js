@@ -4,16 +4,18 @@ import { useNavigate } from 'react-router-dom';
 import { ErrorContext } from '../../contexts/ErrorContext';
 import { useApi } from '../../services/dataService';
 import { DataContext } from '../../contexts/DataContext';
+import reducerTasks from '../../reducers/reducerTasks';
 
 export default function NotOwner({ item, id }) {
     console.log('NotOwner is re-render');
     const { offer } = useApi();
     const { dispatch } = useContext(DataContext);
+    const { setBider } = reducerTasks();
     const { user } = item;
 
     const { title, imgUrl, category, description, price, bider, _id } = item.item;
 
-    const { getError, cleanError } = useContext(ErrorContext);
+    const { getError } = useContext(ErrorContext);
 
     const navigate = useNavigate();
 
@@ -42,15 +44,16 @@ export default function NotOwner({ item, id }) {
             return;
         }
 
+        item.item.price = Number(newOffer.price);
+
         try {
-            item.item.price = Number(newOffer.price);
             const result = await offer(_id, item.item);
-            dispatch({ type: 'UPDATE_BIDER', id: id, updatedItem: result.updatedItem });
-            cleanError();
-            navigate(`/details/${_id}`);
+            setBider(dispatch, id, result);
         } catch (error) {
             getError(error);
         }
+
+        navigate(`/details/${_id}`);
     }
 
     return (

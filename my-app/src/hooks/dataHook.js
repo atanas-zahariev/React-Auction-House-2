@@ -1,30 +1,19 @@
-import { useEffect, useReducer } from 'react';
-import { useApi } from '../services/dataService';
+import { useEffect } from 'react';
 
-const initial = {};
-
-function catalogReducer(x, action) {
-    switch (action.type) {
-        case 'FETCH_SUCCESS': {
-            return { ...action.result };
-        }
-        default: {
-            throw Error('Unknown action: ' + action.type);
-        }
-    }
-}
-
-export const useDataHook = () => {
-    const { getAllDataInSystem } = useApi();
-    const [_items, dispatch] = useReducer(catalogReducer, initial);
+export const useDataHook = (request, task, taskParam, requestParam) => {
 
     useEffect(() => {
         const controller = new AbortController();
         const signal = controller.signal;
         const fetch = async () => {
             try {
-                const result = await getAllDataInSystem(signal);
-                dispatch({ type: 'FETCH_SUCCESS', result });
+                let result;
+                if (requestParam) {
+                    result = await request(signal, ...requestParam);
+                }else{
+                    result = await request(signal);
+                }
+                task(...taskParam, result);
             } catch (error) {
                 console.log(error.message);
             }
@@ -38,7 +27,4 @@ export const useDataHook = () => {
         // eslint-disable-next-line     
     }, []);
 
-    return {
-        _items
-    };
 };

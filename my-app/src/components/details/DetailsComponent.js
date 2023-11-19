@@ -5,7 +5,6 @@ import NotOwner from './NotOwnerComponent';
 import Owner from './OwnerComponent';
 
 import { ErrorContext } from '../../contexts/ErrorContext';
-// import { useDetailsHook } from '../../hooks/detailsHook';
 import { DataContext } from '../../contexts/DataContext';
 
 export default function Details() {

@@ -5,6 +5,7 @@ import Follow from './Follow';
 import { catalogFetch } from '../../../hooks/useFetch';
 import { useContext, useEffect } from 'react';
 import { ErrorContext } from '../../../contexts/ErrorContext';
+import { Link } from 'react-router-dom';
 
 const { createResourse } = catalogFetch();
 
@@ -34,7 +35,7 @@ export default function Catalog() {
                     <div className="item pad-large align-center">
                         <p>Nothing has been listed yet. Be the first!</p>
                         <div>
-                            <a className="action" href="/house/create">Publish Auction</a>
+                            <Link className="action" to="/create">Publish Auction</Link>
                         </div>
                     </div>
                 }

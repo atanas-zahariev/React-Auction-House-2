@@ -1,17 +1,20 @@
-import { useContext, useEffect,  useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import { ErrorContext } from '../../contexts/ErrorContext';
 import { DataContext } from '../../contexts/DataContext';
+import reducerTasks from '../../reducers/reducerTasks';
 
 export default function EditItem() {
     const { getError, cleanError } = useContext(ErrorContext);
 
-    const {  onEdit, dispatch, getItem } = useContext(DataContext);
+    const { onEdit, dispatch, getItem } = useContext(DataContext);
 
     const { id } = useParams();
 
     const navigate = useNavigate();
+
+    const { updateItem } = reducerTasks();
 
     const arrOfCategories = ['vehicles', ' real', 'estate', 'electronics', 'furniture', 'other'];
 
@@ -27,7 +30,7 @@ export default function EditItem() {
         bider: undefined
     });
 
-    
+
     useEffect(() => {
         cleanError();
         const { item, user } = getItem(id);
@@ -95,11 +98,12 @@ export default function EditItem() {
 
         try {
             await onEdit(id, oldItem);
-            dispatch({ type: 'UPDATE_BIDER', id: id, updatedItem: oldItem });
+            updateItem(dispatch, id, oldItem);
             navigate(`/details/${id}`);
         } catch (error) {
             getError(error);
         }
+
     }
 
     return (
