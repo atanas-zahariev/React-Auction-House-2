@@ -20,14 +20,12 @@ import CloseOffer from './components/action/CloseOfferComponent';
 
 import Details from './components/details/DetailsComponent';
 
-import UserClosedOffers from './components/closed-offers/UserClosedOffersComponent';
-
-
 import { AuthGuard } from './guards/UserGuard';
 import { GuestGuard } from './guards/GuestGuard';
 import ErrorBoundary from './guards/errorboundary';
 
 const Catalog = lazy(() => import('./components/common/Catalog/CatalogComponent'));
+const UserClosedOffers = lazy(() => import('./components/closed-offers/UserClosedOffersComponent'));
 
 function App() {
   console.log('App is re-render');
