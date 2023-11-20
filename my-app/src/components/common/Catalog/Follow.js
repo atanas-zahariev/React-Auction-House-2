@@ -1,8 +1,10 @@
 import { useContext, useEffect } from 'react';
-import { Item } from './ItemComponent';
-import { ErrorContext } from '../../../contexts/ErrorContext';
-import { DataContext } from '../../../contexts/DataContext';
 import { Link } from 'react-router-dom';
+
+import { Item } from './ItemComponent';
+
+import { DataContext } from '../../../contexts/DataContext';
+import { ErrorContext } from '../../../contexts/ErrorContext';
 
 export default function Follow() {
     const { cleanError } = useContext(ErrorContext);

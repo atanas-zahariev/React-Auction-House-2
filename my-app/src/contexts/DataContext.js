@@ -54,10 +54,12 @@ export const DataProvider = ({
         };
     };
 
-    const contextValues = useApi();
-    contextValues._items = _items;
-    contextValues.dispatch = dispatch;
-    contextValues.getItem = getItem;
+    const contextValues = {
+        _items,
+        dispatch,
+        getItem
+    };
+
     return (
         <>
             <DataContext.Provider value={contextValues}>

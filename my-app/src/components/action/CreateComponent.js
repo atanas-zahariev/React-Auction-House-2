@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 
 import { ErrorContext } from '../../contexts/ErrorContext';
 import { DataContext } from '../../contexts/DataContext';
+
+import { useApi } from '../../services/dataService';
 import reducerTasks from '../../reducers/reducerTasks';
 
 export default function Create() {
@@ -10,7 +12,9 @@ export default function Create() {
     
     const navigate = useNavigate();
 
-    const {addInSystem,dispatch} = useContext(DataContext);
+    const {addInSystem} = useApi();
+
+    const {dispatch} = useContext(DataContext);
 
     const {createItem} = reducerTasks();
 

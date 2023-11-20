@@ -11,6 +11,7 @@ export default function Owner({ item }) {
     const navigate = useNavigate();
     const { getError } = useContext(ErrorContext);
     const { dispatch } = useContext(DataContext);
+    
     const { onDelete } = useApi();
     const { removeProductFromList } = reducerTasks();
 

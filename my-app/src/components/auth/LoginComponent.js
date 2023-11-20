@@ -2,13 +2,19 @@ import { useContext, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { AuthContext } from '../../contexts/AuthContext';
-import { ErrorContext } from '../../contexts/ErrorContext';
 import { DataContext } from '../../contexts/DataContext';
+import { ErrorContext } from '../../contexts/ErrorContext';
+
+import { useApi } from '../../services/dataService';
 
 export default function Login() {
     const { onLoginSubmit } = useContext(AuthContext);
+
     const { getError, cleanError } = useContext(ErrorContext);
-    const { login, dispatch } = useContext(DataContext);
+
+    const { login } = useApi();
+
+    const { dispatch } = useContext(DataContext);
 
 
     const values = useRef({

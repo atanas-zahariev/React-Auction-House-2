@@ -1,14 +1,18 @@
 import { useContext, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
-import { ErrorContext } from '../../contexts/ErrorContext';
 import { DataContext } from '../../contexts/DataContext';
+import { ErrorContext } from '../../contexts/ErrorContext';
+
+import { useApi } from '../../services/dataService';
 import reducerTasks from '../../reducers/reducerTasks';
 
 export default function EditItem() {
     const { getError, cleanError } = useContext(ErrorContext);
 
-    const { onEdit, dispatch, getItem } = useContext(DataContext);
+    const { onEdit } = useApi();
+
+    const { dispatch, getItem } = useContext(DataContext);
 
     const { id } = useParams();
 

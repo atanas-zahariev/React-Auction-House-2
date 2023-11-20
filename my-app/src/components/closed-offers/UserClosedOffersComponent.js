@@ -1,4 +1,5 @@
 import { useContext, useEffect, useState } from 'react';
+
 import FinishedOffers from './FinishedOffersComponent';
 
 import { ErrorContext } from '../../contexts/ErrorContext';

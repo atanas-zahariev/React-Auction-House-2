@@ -5,12 +5,16 @@ import { AuthContext } from '../../contexts/AuthContext';
 import { ErrorContext } from '../../contexts/ErrorContext';
 import { DataContext } from '../../contexts/DataContext';
 
+import { useApi } from '../../services/dataService';
+
 export default function Register() {
   const { onRegisterSubmit } = useContext(AuthContext);
 
   const { getError, cleanError } = useContext(ErrorContext);
 
-  const { register,dispatch } = useContext(DataContext);
+  const { register } = useApi();
+
+  const { dispatch } = useContext(DataContext);
 
   const [values, setValues] = useState({
     email: '',
