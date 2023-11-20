@@ -16,8 +16,8 @@ export default function reducerTasks() {
         dispatch({type:'ADD_ITEM',result:result});
     };
 
-    const deleteProduct = (dispatch,_id) => {
-        dispatch({type:'DELETE_ITEM',id:_id});
+    const removeProductFromList = (dispatch,_id) => {
+        dispatch({type:'REMOVE_ITEM',id:_id});
     };
 
 
@@ -26,6 +26,6 @@ export default function reducerTasks() {
         setBider,
         updateItem,
         createItem,
-        deleteProduct
+        removeProductFromList
     };
 }

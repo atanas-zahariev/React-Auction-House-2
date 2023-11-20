@@ -15,7 +15,7 @@ export default function dataReducer(initial, action) {
         case 'ADD_ITEM': {
             return { ...initial, items: [...initial.items, action.result] };
         }
-        case 'DELETE_ITEM': {
+        case 'REMOVE_ITEM': {
             return { ...initial, items: initial.items.filter(x => x._id !== action.id) };
         }
         default: {
