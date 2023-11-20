@@ -27,7 +27,7 @@ export default function Owner({ item }) {
                 {title}
                 <div className="f-right">
                     <Link to={`/edit/${_id}`} className="action pad-small f-left" >Edit</Link>
-                    <button onClick={deleteItem} className="action pad-small f-left" >Delete</button>
+                    <Link onClick={deleteItem} className="action pad-small f-left" >Delete</Link>
                 </div>
             </h1>
 

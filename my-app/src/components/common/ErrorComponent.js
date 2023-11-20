@@ -35,9 +35,9 @@ export default function Error() {
 
         const style = {
             margin: 'auto',
-            border:'4px solid white',
-            color:'black',
-            padding:0
+            border: '4px solid white',
+            color: 'black',
+            padding: 0
         };
 
         async function deleteItem() {
@@ -52,7 +52,7 @@ export default function Error() {
 
         return (
             <div className="error-box">
-                <p style={style}><span style={{marginLeft:80,fontSize:20}}>Are you sure you want to delete {title[1]}? </span>
+                <p style={style}><span style={{ marginLeft: 80, fontSize: 20 }}>Are you sure you want to delete {title[1]}? </span>
                     <button onClick={deleteItem} className="error-box" style={{ color: 'white' }} >Confirm</button>
                     <button onClick={cancelDelete} className="error-box" style={{ color: 'white' }} >Cancel</button>
                 </p>

@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 
-export const useDataHook = (request, task, taskParam, requestParam) => {
-
+export const DataHook = (request, task, taskParam, requestParam) => {
+    console.log('here');
     useEffect(() => {
         const controller = new AbortController();
         const signal = controller.signal;
@@ -9,13 +9,15 @@ export const useDataHook = (request, task, taskParam, requestParam) => {
             try {
                 let result;
                 if (requestParam) {
-                    result = await request(signal, ...requestParam);
-                }else{
+                    console.log('if');
+                    result = await request(...requestParam, signal);
+                } else {
                     result = await request(signal);
                 }
                 task(...taskParam, result);
             } catch (error) {
                 console.log(error.message);
+                console.log(error);
             }
         };
         fetch();
