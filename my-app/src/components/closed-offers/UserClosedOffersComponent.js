@@ -2,12 +2,12 @@ import { useContext, useEffect, useState } from 'react';
 import FinishedOffers from './FinishedOffersComponent';
 
 import { ErrorContext } from '../../contexts/ErrorContext';
-import { DataContext } from '../../contexts/DataContext';
+import { useApi } from '../../services/dataService';
 
 export default function UserClosedOffers() {
     const { getError, cleanError } = useContext(ErrorContext);
 
-    const { getTotalAction } = useContext(DataContext);
+    const { getTotalAction } = useApi();
 
     const [offers, setOffers] = useState({});
 
