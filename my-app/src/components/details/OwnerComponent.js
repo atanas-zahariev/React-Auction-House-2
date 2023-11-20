@@ -2,40 +2,22 @@ import { useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
 import { ErrorContext } from '../../contexts/ErrorContext';
-import { DataContext } from '../../contexts/DataContext';
-
-import reducerTasks from '../../reducers/reducerTasks';
-import { useApi } from '../../services/dataService';
 
 export default function Owner({ item }) {
     const navigate = useNavigate();
     const { getError } = useContext(ErrorContext);
-    const { dispatch } = useContext(DataContext);
-    
-    const { onDelete } = useApi();
-    const { removeProductFromList } = reducerTasks();
 
     const { title, imgUrl, category, description, price, bider, _id, owner } = item.item;
 
     const { user } = item;
 
     async function deleteItem() {
-        try {
-            if (!user || (user._id !== owner)) {
-                navigate('/login');
-                return;
-            }
-
-            const confirmed = window.confirm(`Are you sure you want to delete ${title}`);
-
-            if (confirmed) {
-                await onDelete(_id);
-                removeProductFromList(dispatch, _id);
-                navigate('/catalog');
-            }
-        } catch (error) {
-            getError(error);
+        if (!user || (user._id !== owner)) {
+            navigate('/login');
+            return;
         }
+
+        getError(`Delete ${title} ${_id}`);
     }
 
     return (
