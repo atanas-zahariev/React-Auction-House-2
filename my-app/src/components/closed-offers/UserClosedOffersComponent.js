@@ -5,13 +5,14 @@ import { ErrorContext } from '../../contexts/ErrorContext';
 import { DataContext } from '../../contexts/DataContext';
 
 export default function UserClosedOffers() {
-    const { getError } = useContext(ErrorContext);
+    const { getError, cleanError } = useContext(ErrorContext);
 
     const { getTotalAction } = useContext(DataContext);
-    
+
     const [offers, setOffers] = useState({});
 
     useEffect(() => {
+        cleanError();
         async function fetchData() {
             try {
                 const result = await getTotalAction();
