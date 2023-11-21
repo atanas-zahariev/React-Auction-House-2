@@ -14,9 +14,9 @@ export const DataProvider = ({
     console.log('DataContext is re-render');
 
     const { getAllDataInSystem } = useApi();
-    const {getCatlogList} = reducerTasks();
+    const { getCatlogList } = reducerTasks();
     const initial = {};
- 
+
     const [_items, dispatch] = useReducer(dataReducer, initial);
 
     useEffect(() => {
@@ -25,7 +25,7 @@ export const DataProvider = ({
         const fetch = async () => {
             try {
                 const result = await getAllDataInSystem(signal);
-                getCatlogList(dispatch,result);
+                getCatlogList(dispatch, result);
             } catch (error) {
                 console.log(error.message);
             }
@@ -54,10 +54,23 @@ export const DataProvider = ({
         };
     };
 
+    const search = ({ category, lower, upper }) => {
+        let selectItems;
+        selectItems = _items.items.filter(x => x.category === category);
+        if (lower) {
+            selectItems = selectItems.filter(x => x.price >= Number(lower));
+        }
+        if(upper){
+            selectItems = selectItems.filter(x => x.price <= Number(upper));
+        }
+        return selectItems;
+    };
+
     const contextValues = {
         _items,
         dispatch,
-        getItem
+        getItem,
+        search
     };
 
     return (
