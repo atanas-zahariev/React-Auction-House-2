@@ -71,3 +71,12 @@ html {
     box-shadow: var(--shadow);
 }
 
+#delete {
+    margin: auto;
+    color: black;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    background-color: rgb(228 231 228);
+    padding: 0
+}

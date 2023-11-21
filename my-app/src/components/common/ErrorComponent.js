@@ -30,15 +30,9 @@ export default function Error() {
             </div>
         );
     } else if (typeof error === 'string' && error.includes('Delete')) {
-        const title = error.split(' ');
+        const title = error.split('/');
         const id = title[title.length - 1];
 
-        const style = {
-            margin: 'auto',
-            border: '4px solid white',
-            color: 'black',
-            padding: 0
-        };
 
         async function deleteItem() {
             try {
@@ -52,9 +46,9 @@ export default function Error() {
 
         return (
             <div className="error-box">
-                <p style={style}><span style={{ marginLeft: 80, fontSize: 20 }}>Are you sure you want to delete {title[1]}? </span>
-                    <button onClick={deleteItem} className="error-box" style={{ color: 'white' }} >Confirm</button>
-                    <button onClick={cancelDelete} className="error-box" style={{ color: 'white' }} >Cancel</button>
+                <p id='delete'><span style={{ fontSize: 20,fontWeight:'bold' }}>Are you sure you want to delete {title[1]} </span>
+                    <button onClick={deleteItem} className="error-box" style={{ color: 'white', padding: 5,fontWeight:'bold' }} >Confirm</button>
+                    <button onClick={cancelDelete} className="error-box" style={{ color: 'white', padding: 5,fontWeight:'bold' }} >Cancel</button>
                 </p>
             </div>
         );

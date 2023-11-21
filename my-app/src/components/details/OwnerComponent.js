@@ -17,7 +17,7 @@ export default function Owner({ item }) {
             return;
         }
 
-        getError(`Delete ${title} ${_id}`);
+        getError(`Delete/${title}/${_id}`);
     }
 
     return (
