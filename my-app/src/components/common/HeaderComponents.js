@@ -16,6 +16,9 @@ export default function Header() {
                     {/* <!-- User actions --> */}
                     {state && (
                         <ul>
+                             <li>
+                                <Link to="/search">Search</Link>
+                            </li>
                             <li>
                                 <Link to="/catalog">Browse</Link>
                             </li>

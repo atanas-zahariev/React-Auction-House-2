@@ -23,6 +23,7 @@ import Details from './components/details/DetailsComponent';
 import { AuthGuard } from './guards/UserGuard';
 import { GuestGuard } from './guards/GuestGuard';
 import ErrorBoundary from './guards/errorboundary';
+import Search from './components/action/SearchComponent';
 
 const Catalog = lazy(() => import('./components/common/Catalog/CatalogComponent'));
 const UserClosedOffers = lazy(() => import('./components/closed-offers/UserClosedOffersComponent'));
@@ -56,6 +57,7 @@ function App() {
                       <Route path='/edit/:id' element={<EditItem />} />
                       <Route path='/userAction/:id' element={<CloseOffer />} />
                       <Route path='/closed' element={<UserClosedOffers />} />
+                      <Route path='/search' element={<Search />} />
                     </Route>
 
                   </Routes>
