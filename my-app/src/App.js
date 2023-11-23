@@ -9,6 +9,7 @@ import Header from './components/common/HeaderComponents';
 import Home from './components/common/HomeComponent';
 import Error from './components/common/ErrorComponent';
 import Spinner from './components/common/Spiner';
+import { Default } from './components/common/DefaultComponent';
 
 import Login from './components/auth/LoginComponent';
 import Register from './components/auth/RegisterComponent';
@@ -17,14 +18,14 @@ import Logout from './components/auth/LogoutComponent';
 import Create from './components/action/CreateComponent';
 import EditItem from './components/action/EditItemComponent';
 import CloseOffer from './components/action/CloseOfferComponent';
+import Search from './components/action/SearchComponent';
+import { SearchTable } from './components/action/SearchTable';
 
 import Details from './components/details/DetailsComponent';
 
 import { AuthGuard } from './guards/UserGuard';
 import { GuestGuard } from './guards/GuestGuard';
 import ErrorBoundary from './guards/errorboundary';
-import Search from './components/action/SearchComponent';
-import { SearchTable } from './components/action/SearchTable';
 
 const Catalog = lazy(() => import('./components/common/Catalog/CatalogComponent'));
 const UserClosedOffers = lazy(() => import('./components/closed-offers/UserClosedOffersComponent'));
@@ -61,6 +62,8 @@ function App() {
                       <Route path='/userAction/:id' element={<CloseOffer />} />
                       <Route path='/closed' element={<UserClosedOffers />} />
                     </Route>
+
+                    <Route path='*' element={<Default />} />
 
                   </Routes>
                 </Suspense>
