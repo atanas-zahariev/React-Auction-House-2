@@ -51,7 +51,7 @@ export const DataProvider = ({
     }, []);
 
     const getItem = (id) => {
-        const item = _items.items?.map(x => x._id === id ? x : '').filter(x => x !== '')[0];
+        const item = _items.items?.filter(x => x._id === id)[0];
         const user = _items.user;
         if (user) {
             return {
@@ -72,7 +72,7 @@ export const DataProvider = ({
         if (lower) {
             selectItems = selectItems.filter(x => x.price >= Number(lower));
         }
-        
+
         if (upper) {
             selectItems = selectItems.filter(x => x.price <= Number(upper));
         }

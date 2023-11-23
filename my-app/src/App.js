@@ -70,7 +70,7 @@ function App() {
               </ErrorBoundary>
             </main>
 
-            <footer>SoftUni &copy; 2022 | Design by Viktor Kostadinov</footer>
+            <footer>SoftUni &copy; 2023 React Exam</footer>
           </div>
         </DataProvider>
       </ErrorProvider>
