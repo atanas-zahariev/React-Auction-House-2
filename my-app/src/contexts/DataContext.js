@@ -1,4 +1,4 @@
-import { createContext, useEffect, useReducer } from 'react';
+import { createContext, useEffect, useReducer, useState } from 'react';
 
 import { useApi } from '../services/dataService';
 
@@ -18,6 +18,17 @@ export const DataProvider = ({
     const initial = {};
 
     const [_items, dispatch] = useReducer(dataReducer, initial);
+
+    const [searchItems, setSearchItems] = useState(() => {
+        const searchItemsState = sessionStorage.getItem('search');
+
+        if (searchItemsState) {
+            const hasSearchItems = JSON.parse(searchItemsState);
+
+            return hasSearchItems;
+        }
+        return [];
+    });
 
     useEffect(() => {
         const controller = new AbortController();
@@ -57,20 +68,26 @@ export const DataProvider = ({
     const search = ({ category, lower, upper }) => {
         let selectItems;
         selectItems = _items.items.filter(x => x.category === category);
+
         if (lower) {
             selectItems = selectItems.filter(x => x.price >= Number(lower));
         }
-        if(upper){
+        
+        if (upper) {
             selectItems = selectItems.filter(x => x.price <= Number(upper));
         }
-        return selectItems;
+
+        setSearchItems(selectItems);
+
+        sessionStorage.setItem('search', JSON.stringify(selectItems));
     };
 
     const contextValues = {
         _items,
         dispatch,
         getItem,
-        search
+        search,
+        searchItems
     };
 
     return (

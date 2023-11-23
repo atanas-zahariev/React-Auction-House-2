@@ -21,6 +21,7 @@ export const AuthProvider = ({
 
     const onLogout = () => {
         setState('');
+        sessionStorage.removeItem('search');
     };
 
     const contextValues = {
