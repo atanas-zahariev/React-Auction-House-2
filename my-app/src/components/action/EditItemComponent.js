@@ -6,6 +6,7 @@ import { ErrorContext } from '../../contexts/ErrorContext';
 
 import { useApi } from '../../services/dataService';
 import reducerTasks from '../../reducers/reducerTasks';
+import { itemValidationHook } from '../../hooks/itemValidationHook';
 
 export default function EditItem() {
     const { getError, cleanError } = useContext(ErrorContext);
@@ -20,10 +21,6 @@ export default function EditItem() {
 
     const { updateItem } = reducerTasks();
 
-    const arrOfCategories = ['vehicles', ' real', 'estate', 'electronics', 'furniture', 'other'];
-
-    const IMAGE_URL = /^https?:\/\/.*/i;
-
     const [oldItem, setOldItem] = useState({
         _id: '',
         title: '',
@@ -37,15 +34,18 @@ export default function EditItem() {
 
     useEffect(() => {
         cleanError();
+
         const { item, user } = getItem(id);
+
         if (!user || (user._id !== item.owner)) {
-            navigate('/login');
+            navigate('/logout');
             return;
         }
+
         setOldItem(item);
         // eslint-disable-next-line
     }, []);
-
+    
 
 
 
@@ -57,49 +57,13 @@ export default function EditItem() {
     async function onSubmit(e) {
         e.preventDefault();
 
-        const { title, category, imgUrl, price, description } = oldItem;
-
-        if (Object.values(oldItem).some(x => x === '')) {
-            getError(['All fields are required.']);
+        const error = itemValidationHook(oldItem);
+        
+        if(error){
+            getError(error);
             return;
         }
-
-        if (title) {
-            if (title.length < 4) {
-                getError(['Title must be at least 4 characters.']);
-                return;
-            }
-        }
-
-        if (category) {
-            if (!arrOfCategories.includes(category)) {
-                getError(['It is not in the list of categories.']);
-                return;
-            }
-        }
-
-        if (imgUrl) {
-            if (!IMAGE_URL.test(imgUrl)) {
-                getError(['Invalid Url.']);
-                return;
-            }
-        }
-
-        if (price) {
-            if (Number(price) <= 0) {
-                getError(['This price cannot be real.']);
-                return;
-            }
-        }
-
-        if (description) {
-            if (description.length > 200) {
-                getError(['Description must be at most 200 characters.']);
-                return;
-            };
-        }
-
-
+        
         try {
             await onEdit(id, oldItem);
             updateItem(dispatch, id, oldItem);

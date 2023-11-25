@@ -6,6 +6,7 @@ import { DataContext } from '../../contexts/DataContext';
 
 import { useApi } from '../../services/dataService';
 import reducerTasks from '../../reducers/reducerTasks';
+import { itemValidationHook } from '../../hooks/itemValidationHook';
 
 export default function Create() {
     const { getError, cleanError } = useContext(ErrorContext);
@@ -18,9 +19,6 @@ export default function Create() {
 
     const {createItem} = reducerTasks();
 
-    const IMAGE_URL = /^https?:\/\/.*/i;
-
-    const arrOfCategories = ['vehicles', ' real', 'estate', 'electronics', 'furniture', 'other'];
 
     const [values, setValues] = useState({
         title: '',
@@ -44,46 +42,11 @@ export default function Create() {
     async function onSubmit(e) {
         e.preventDefault();
 
-        const { title, category, imgUrl, price, description } = values;
-
-        if (Object.values(values).some(x => x === '')) {
-            getError(['All fields are required.']);
+        const error = itemValidationHook(values);
+        
+        if(error){
+            getError(error);
             return;
-        }
-
-        if (title) {
-            if (title.length < 4) {
-                getError(['Title must be at least 4 characters.']);
-                return;
-            }
-        }
-
-        if (category) {
-            if (!arrOfCategories.includes(category)) {
-                getError(['It is not in the list of categories.']);
-                return;
-            }
-        }
-
-        if (imgUrl) {
-            if (!IMAGE_URL.test(imgUrl)) {
-                getError(['Invalid Url.']);
-                return;
-            }
-        }
-
-        if (price) {
-            if (Number(price) <= 0) {
-                getError(['This price cannot be real.']);
-                return;
-            }
-        }
-
-        if (description) {
-            if (description.length > 200) {
-                getError(['Description must be at most 200 characters.']);
-                return;
-            };
         }
 
         try {

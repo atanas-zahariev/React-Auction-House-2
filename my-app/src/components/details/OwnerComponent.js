@@ -2,23 +2,29 @@ import { useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
 import { ErrorContext } from '../../contexts/ErrorContext';
+import { DataContext } from '../../contexts/DataContext';
 
 export default function Owner({ item }) {
     const navigate = useNavigate();
+
     const { getError } = useContext(ErrorContext);
 
-    const { title, imgUrl, category, description, price, bider, _id, owner } = item.item;
-
-    const { user } = item;
-
-    async function deleteItem() {
-        if (!user || (user._id !== owner)) {
-            navigate('/login');
+    const {getItem} = useContext(DataContext);
+    
+    function deleteItem() {
+        const { item, user } = getItem(_id);
+        
+        if (!user || (user._id !== item.owner)) {
+            navigate('/logout');
             return;
         }
 
         getError(`Delete/${title}/${_id}`);
     }
+    
+    const { title, imgUrl, category, description, price, bider, _id } = item.item;
+
+    const { user } = item;
 
     return (
         <section id="catalog-section">
