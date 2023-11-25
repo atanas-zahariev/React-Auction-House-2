@@ -1,11 +1,12 @@
 const { addInCollection, createItem, getAllItem, getItemById, editItem, deleteItem, closeOffer } = require('../services/itemService');
 const errorParser = require('../utyl/parser');
+const { hasUser } = require('./guard');
 
 const itemControler = require('express').Router();
 
 
 
-itemControler.post('/create',  async (req, res) => {
+itemControler.post('/create', hasUser(), async (req, res) => {
     const { title, category, imgUrl, price, description } = req.body;
     const item = {
         title,
@@ -28,7 +29,7 @@ itemControler.post('/create',  async (req, res) => {
 
 itemControler.get('/catalog', async (req, res) => {
     let items = await getAllItem();
-    
+
     items = items.filter(x => x.description != 'isClosed')
     const obj = {
         items,
@@ -38,7 +39,7 @@ itemControler.get('/catalog', async (req, res) => {
     res.json(obj)
 });
 
-itemControler.get('/details/:id',async (req, res) => {
+itemControler.get('/details/:id', async (req, res) => {
     try {
         const item = await getItemById(req.params.id);
         const obj = {
@@ -53,7 +54,7 @@ itemControler.get('/details/:id',async (req, res) => {
 })
 
 
-itemControler.post('/details/:id',  async (req, res) => {
+itemControler.post('/details/:id',hasUser(), async (req, res) => {
     try {
         const item = await getItemById(req.params.id);
         await addInCollection(item._id, req.user._id, req.body.price);
@@ -71,8 +72,8 @@ itemControler.post('/details/:id',  async (req, res) => {
 })
 
 
-itemControler.post('/edit/:id',  async (req, res) => {
-    
+itemControler.post('/edit/:id',hasUser(), async (req, res) => {
+
     const { title, category, imgUrl, price, description } = req.body;
 
     const edited = {
@@ -93,7 +94,7 @@ itemControler.post('/edit/:id',  async (req, res) => {
 });
 
 
-itemControler.get('/delete/:id', async (req, res) => {
+itemControler.get('/delete/:id',hasUser(), async (req, res) => {
     console.log('delete');
 
     try {
@@ -106,7 +107,7 @@ itemControler.get('/delete/:id', async (req, res) => {
     }
 })
 
-itemControler.get('/userAction/:id', async (req, res) => {
+itemControler.get('/userAction/:id',hasUser(), async (req, res) => {
     try {
         await closeOffer(req.params.id)
 

@@ -60,9 +60,8 @@ export const useRequest = () => {
         } catch (error) {
             if (error[0] === 'Invalid authorization token') {
                 localStorage.clear();
-                onLogout();
+                onLogout();            
                 navigate('/login');
-                return;
             }
             throw error;
         }

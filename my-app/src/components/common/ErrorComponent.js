@@ -47,8 +47,8 @@ export default function Error() {
         return (
             <div className="error-box">
                 <p id='delete'><span style={{ fontSize: 20,fontWeight:'bold' }}>Are you sure you want to delete {title[1]} </span>
-                    <button onClick={deleteItem} className="error-box" style={{ color: 'white', padding: 5,fontWeight:'bold' }} >Confirm</button>
-                    <button onClick={cancelDelete} className="error-box" style={{ color: 'white', padding: 5,fontWeight:'bold' }} >Cancel</button>
+                    <button onClick={deleteItem} className="error-box" style={{ color: 'white', padding: 5,fontWeight:'bold',backgroundColor:'red' }} >Confirm</button>
+                    <button onClick={cancelDelete} className="error-box" style={{ color: 'white', padding: 5,fontWeight:'bold',backgroundColor:'red' }} >Cancel</button>
                 </p>
             </div>
         );
