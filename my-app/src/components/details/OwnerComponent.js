@@ -1,24 +1,34 @@
-import { useContext } from 'react';
-import { Link} from 'react-router-dom';
+import { useContext, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 
 import { ErrorContext } from '../../contexts/ErrorContext';
 import { getUser } from '../../services/utility';
 
 export default function Owner({ item }) {
     const { getError } = useContext(ErrorContext);
-
+    const navigate = useNavigate();
+    const [checkForuser, setCheck] = useState(false);
+    
+    if (checkForuser) {
+        navigate('/logout');
+    }
+    
     
     function deleteItem() {
-        const  user  = getUser();
+        const hasUser = getUser();
         
-        if (!user) {
-          getError(['No User!']);
-          return;          
+        if (!hasUser) {
+            setCheck(true);
+            return;
         }
 
         getError(`Delete/${title}/${_id}`);
     }
-    
+
+
+
+
+
     const { title, imgUrl, category, description, price, bider, _id } = item.item;
 
     const { user } = item;

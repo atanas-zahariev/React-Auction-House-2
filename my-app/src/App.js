@@ -55,8 +55,9 @@ function App() {
                       <Route path='/register' element={<Register />} />
                     </Route>
 
-                    <Route element={<AuthGuard />}>
                       <Route path='/logout' element={<Logout />} />
+                      
+                    <Route element={<AuthGuard />}>
                       <Route path='/create' element={<Create />} />
                       <Route path='/edit/:id' element={<EditItem />} />
                       <Route path='/userAction/:id' element={<CloseOffer />} />
