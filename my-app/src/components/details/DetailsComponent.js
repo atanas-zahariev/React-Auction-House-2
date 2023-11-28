@@ -6,6 +6,7 @@ import Owner from './OwnerComponent';
 
 import { ErrorContext } from '../../contexts/ErrorContext';
 import { DataContext } from '../../contexts/DataContext';
+import Spinner from '../common/Spiner';
 
 export default function Details() {
     const { cleanError } = useContext(ErrorContext);
@@ -30,6 +31,9 @@ export default function Details() {
         return (
             <NotOwner item={_item} id={id}/>
         );
-
     }
+
+    return (
+        <Spinner />
+    );
 }
