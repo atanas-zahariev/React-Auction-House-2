@@ -6,6 +6,7 @@ import { DataContext } from '../../contexts/DataContext';
 import { ErrorContext } from '../../contexts/ErrorContext';
 
 import { useApi } from '../../services/dataService';
+import { validationHook } from '../../hooks/validationHook';
 
 export default function Login() {
     const { onLoginSubmit } = useContext(AuthContext);
@@ -38,12 +39,8 @@ export default function Login() {
     async function onSubmit(e) {
         e.preventDefault();
 
-        if (Object.values(values.current).some(x => !x)) {
-            getError(['All fields are required']);
-            return;
-        }
-
         try {
+            validationHook(values.current);
             const result = await login(values.current);
             dispatch({ type: 'USER', user: result });
             onLoginSubmit();

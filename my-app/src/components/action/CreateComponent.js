@@ -6,7 +6,7 @@ import { DataContext } from '../../contexts/DataContext';
 
 import { useApi } from '../../services/dataService';
 import reducerTasks from '../../reducers/reducerTasks';
-import { itemValidationHook } from '../../hooks/itemValidationHook';
+import { validationHook } from '../../hooks/validationHook';
 
 export default function Create() {
     const { getError, cleanError } = useContext(ErrorContext);
@@ -43,7 +43,7 @@ export default function Create() {
         e.preventDefault();       
         
         try {
-            itemValidationHook(values);
+            validationHook(values);
             const result = await addInSystem(values);
             createItem(dispatch,result);
             navigate('/catalog');

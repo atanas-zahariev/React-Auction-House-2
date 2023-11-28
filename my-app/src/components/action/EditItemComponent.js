@@ -6,7 +6,7 @@ import { ErrorContext } from '../../contexts/ErrorContext';
 
 import { useApi } from '../../services/dataService';
 import reducerTasks from '../../reducers/reducerTasks';
-import { itemValidationHook } from '../../hooks/itemValidationHook';
+import { validationHook } from '../../hooks/validationHook';
 import Spinner from '../common/Spiner';
 
 export default function EditItem() {
@@ -53,7 +53,7 @@ export default function EditItem() {
         e.preventDefault();
 
         try {
-            itemValidationHook(oldItem);
+            validationHook(oldItem);
             await onEdit(id, oldItem);
             updateItem(dispatch, id, oldItem);
             navigate(`/details/${id}`);

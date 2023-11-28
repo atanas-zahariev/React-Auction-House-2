@@ -6,6 +6,7 @@ import { ErrorContext } from '../../contexts/ErrorContext';
 import { DataContext } from '../../contexts/DataContext';
 
 import { useApi } from '../../services/dataService';
+import { validationHook } from '../../hooks/validationHook';
 
 export default function Register() {
   const { onRegisterSubmit } = useContext(AuthContext);
@@ -43,51 +44,8 @@ export default function Register() {
   async function onSubmit(e) {
     e.preventDefault();
 
-    const { email, firstname, lastname, password, repass } = values;
-
-    const REGEX_FOR_Email = /^[A-Za-z]+@[A-Za-z]+\.[A-Za-z]+$/m;
-
-    if (Object.values(values).some(x => x === '')) {
-      getError(['All fields are required!']);
-      return;
-    }
-
-    if (email) {
-      if (!REGEX_FOR_Email.test(email)) {
-        getError(['Incorect email!']);
-        return;
-      }
-    }
-
-    if (firstname) {
-      if (firstname.length < 2) {
-        getError(['First name must be at least 2 characters!']);
-        return;
-      }
-    }
-
-    if (lastname) {
-      if (lastname.length < 2) {
-        getError(['Last name must be at least 2 characters!']);
-        return;
-      }
-    }
-
-    if (password) {
-      if (password.length < 5) {
-        getError(['Password must be at least 5 characters!']);
-        return;
-      }
-    }
-
-    if (password || repass) {
-      if (password !== repass) {
-        getError(['The passwords do not match!']);
-        return;
-      }
-    }
-
     try {
+      validationHook(values);
       const result = await register(values);
       dispatch({ type: 'USER', user: result });
       onRegisterSubmit();

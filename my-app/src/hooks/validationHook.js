@@ -1,16 +1,54 @@
 
-export const itemValidationHook = (value) => {
+export const validationHook = (value) => {
     let error;
     const arrOfCategories = ['vehicles', ' real', 'estate', 'electronics', 'furniture', 'other'];
 
     const IMAGE_URL = /^https?:\/\/.*/i;
 
-    const { title, category, imgUrl, price, description } = value;
+    const REGEX_FOR_Email = /^[A-Za-z]+@[A-Za-z]+\.[A-Za-z]+$/m;
+
+
+    const { title, category, imgUrl, price, description, email, firstname, lastname, password, repass } = value;
 
 
     if (Object.values(value).some(x => x === '')) {
         error = ['All fields are required.'];
         throw error;
+    }
+
+    if (email) {
+        if (!REGEX_FOR_Email.test(email)) {
+            error = ['Incorect email!'];
+            throw error;
+        }
+    }
+
+    if (firstname) {
+        if (firstname.length < 2) {
+            error = ['First name must be at least 2 characters!'];
+            throw error;
+        }
+    }
+
+    if (lastname) {
+        if (lastname.length < 2) {
+            error = ['Last name must be at least 2 characters!'];
+            throw error;
+        }
+    }
+
+    if (password) {
+        if (password.length < 5) {
+            error = ['Password must be at least 5 characters!'];
+            throw error;
+        }
+    }
+
+    if (password && repass) {
+        if (password !== repass) {
+            error = ['The passwords do not match!'];
+            throw error;
+        }
     }
 
     if (title) {
@@ -48,5 +86,7 @@ export const itemValidationHook = (value) => {
             throw error;
         };
     }
+
+
 
 };
