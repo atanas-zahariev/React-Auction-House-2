@@ -10,34 +10,34 @@ export const itemValidationHook = (value) => {
 
     if (Object.values(value).some(x => x === '')) {
         error = ['All fields are required.'];
-        return error;
+        throw error;
     }
 
     if (title) {
         if (title.length < 4) {
             error = ['Title must be at least 4 characters.'];
-            return error;
+            throw error;
         }
     }
 
     if (category) {
         if (!arrOfCategories.includes(category)) {
             error = ['It is not in the list of categories.'];
-            return error;
+            throw error;
         }
     }
 
     if (imgUrl) {
         if (!IMAGE_URL.test(imgUrl)) {
             error = ['Invalid Url.'];
-            return error;
+            throw error;
         }
     }
 
     if (price) {
         if (Number(price) <= 0) {
             error = ['This price cannot be real.'];
-            return error;
+            throw error;
 
         }
     }
@@ -45,7 +45,7 @@ export const itemValidationHook = (value) => {
     if (description) {
         if (description.length > 200) {
             error = ['Description must be at most 200 characters.'];
-            return error;
+            throw error;
         };
     }
 

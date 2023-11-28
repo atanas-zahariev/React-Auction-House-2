@@ -56,15 +56,9 @@ export default function EditItem() {
 
     async function onSubmit(e) {
         e.preventDefault();
-
-        const error = itemValidationHook(oldItem);
-        
-        if(error){
-            getError(error);
-            return;
-        }
         
         try {
+            itemValidationHook(oldItem);
             await onEdit(id, oldItem);
             updateItem(dispatch, id, oldItem);
             navigate(`/details/${id}`);

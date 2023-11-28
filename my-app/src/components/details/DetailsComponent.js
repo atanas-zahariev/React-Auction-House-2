@@ -9,6 +9,7 @@ import { DataContext } from '../../contexts/DataContext';
 
 export default function Details() {
     const { cleanError } = useContext(ErrorContext);
+    const {getItem} = useContext(DataContext);
 
     const { id } = useParams();
 
@@ -17,7 +18,6 @@ export default function Details() {
         // eslint-disable-next-line
     }, []);  
 
-    const {getItem} = useContext(DataContext);
     const _item = getItem(id);
 
     if (_item.item) {
