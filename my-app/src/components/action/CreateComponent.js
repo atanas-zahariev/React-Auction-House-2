@@ -40,16 +40,10 @@ export default function Create() {
     };
 
     async function onSubmit(e) {
-        e.preventDefault();
-
-        const error = itemValidationHook(values);
+        e.preventDefault();       
         
-        if(error){
-            getError(error);
-            return;
-        }
-
         try {
+            itemValidationHook(values);
             const result = await addInSystem(values);
             createItem(dispatch,result);
             navigate('/catalog');
