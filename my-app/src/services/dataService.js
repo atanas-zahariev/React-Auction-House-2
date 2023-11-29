@@ -51,8 +51,8 @@ export const useApi = () => {
         return result;
     }
 
-    async function onEdit(id, data) {
-        const result = await post(endpoints.edit + id, data);
+    async function onEdit(id, data,signal) {
+        const result = await post(endpoints.edit + id, data,signal);
         return result;
     };
 

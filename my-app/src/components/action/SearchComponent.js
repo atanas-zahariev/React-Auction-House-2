@@ -6,7 +6,24 @@ import { DataContext } from '../../contexts/DataContext';
 export default function Search() {
     const navigate = useNavigate();
 
-    const { search } = useContext(DataContext);
+    const { _items, setSearchItems} = useContext(DataContext);
+
+    const search = ({ category, lower, upper }) => {
+        let selectItems;
+        selectItems = _items.items.filter(x => x.category === category);
+
+        if (lower) {
+            selectItems = selectItems.filter(x => x.price >= Number(lower));
+        }
+
+        if (upper) {
+            selectItems = selectItems.filter(x => x.price <= Number(upper));
+        }
+
+        setSearchItems(selectItems);
+
+        sessionStorage.setItem('search', JSON.stringify(selectItems));
+    };
 
     const values = useRef({
         category: 'estate',

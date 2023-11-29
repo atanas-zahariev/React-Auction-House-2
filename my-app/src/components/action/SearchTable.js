@@ -1,5 +1,6 @@
-import { DataContext } from '../../contexts/DataContext';
 import { useContext } from 'react';
+
+import { DataContext } from '../../contexts/DataContext';
 
 import { Item } from '../common/Catalog/ItemComponent';
 

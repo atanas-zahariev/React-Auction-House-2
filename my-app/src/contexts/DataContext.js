@@ -11,8 +11,6 @@ export const DataContext = createContext();
 export const DataProvider = ({
     children,
 }) => {
-    console.log('DataContext is re-render');
-
     const { getAllDataInSystem } = useApi();
     const { getCatlogList } = reducerTasks();
     const initial = {};
@@ -33,6 +31,7 @@ export const DataProvider = ({
     useEffect(() => {
         const controller = new AbortController();
         const signal = controller.signal;
+
         const fetch = async () => {
             try {
                 const result = await getAllDataInSystem(signal);
@@ -46,7 +45,6 @@ export const DataProvider = ({
         return () => {
             controller.abort();
         };
-
         // eslint-disable-next-line     
     }, []);
 
@@ -65,29 +63,13 @@ export const DataProvider = ({
         };
     };
 
-    const search = ({ category, lower, upper }) => {
-        let selectItems;
-        selectItems = _items.items.filter(x => x.category === category);
-
-        if (lower) {
-            selectItems = selectItems.filter(x => x.price >= Number(lower));
-        }
-
-        if (upper) {
-            selectItems = selectItems.filter(x => x.price <= Number(upper));
-        }
-
-        setSearchItems(selectItems);
-
-        sessionStorage.setItem('search', JSON.stringify(selectItems));
-    };
 
     const contextValues = {
         _items,
         dispatch,
         getItem,
-        search,
-        searchItems
+        searchItems,
+        setSearchItems
     };
 
     return (
