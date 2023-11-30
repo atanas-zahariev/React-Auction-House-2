@@ -37,7 +37,7 @@ export const useApi = () => {
     }
 
     async function getAllDataInSystem(signal) {
-        const result = await get(endpoints.getAllDataInSistem,undefined,signal);
+        const result = await get(endpoints.getAllDataInSistem, undefined, signal);
         return result;
     }
 
@@ -51,8 +51,8 @@ export const useApi = () => {
         return result;
     }
 
-    async function onEdit(id, data,signal) {
-        const result = await post(endpoints.edit + id, data,signal);
+    async function onEdit(id, data, signal) {
+        const result = await post(endpoints.edit + id, data, signal);
         return result;
     };
 

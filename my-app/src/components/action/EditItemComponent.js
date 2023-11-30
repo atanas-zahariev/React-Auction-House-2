@@ -6,14 +6,14 @@ import { ErrorContext } from '../../contexts/ErrorContext';
 
 import { useApi } from '../../services/dataService';
 import reducerTasks from '../../reducers/reducerTasks';
-import { validationHook } from '../../hooks/validationHook';
 
 import Spinner from '../common/Spiner';
+import { useDataHook } from '../../hooks/dataHook';
 
 let controller = new AbortController();
 
 export default function EditItem() {
-    const { getError, cleanError } = useContext(ErrorContext);
+    const { cleanError } = useContext(ErrorContext);
 
     const { onEdit } = useApi();
 
@@ -33,11 +33,11 @@ export default function EditItem() {
         price: '',
         description: '',
         bider: undefined
-    });    
+    });
 
     const { item } = getItem(id);
 
-    useEffect(() => {        
+    useEffect(() => {
         cleanError();
 
         setOldItem(item);
@@ -53,20 +53,16 @@ export default function EditItem() {
         setOldItem(state => ({ ...state, [e.target.name]: e.target.value }));
     };
 
-    async function onSubmit(e) {
-        e.preventDefault();
 
-        try {
-            validationHook(oldItem);
-            await onEdit(id, oldItem, controller.signal);
-            updateItem(dispatch, id, oldItem);
-            navigate(`/details/${id}`);
-        } catch (error) {
-            console.log(error);
-            getError(error);
-        }
-
-    }
+    const onSubmit = useDataHook(
+        onEdit,
+        updateItem,
+        [dispatch, id, oldItem],
+        [id, oldItem, controller.signal],
+        oldItem,
+        navigate,
+        `/details/${id}`
+    );
 
     if (oldItem) {
 

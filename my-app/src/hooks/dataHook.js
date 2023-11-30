@@ -1,32 +1,34 @@
-import { useEffect } from 'react';
+import { useContext } from 'react';
+import { ErrorContext } from '../contexts/ErrorContext';
+import { validationHook } from './validationHook';
 
-export const DataHook = (request, task, taskParam, requestParam) => {
+export const useDataHook = (request, task, taskParam, requestParam, values, navigate, adress) => {
     console.log('here');
-    useEffect(() => {
-        const controller = new AbortController();
-        const signal = controller.signal;
-        const fetch = async () => {
-            try {
-                let result;
-                if (requestParam) {
-                    console.log('if');
-                    result = await request(...requestParam, signal);
-                } else {
-                    result = await request(signal);
-                }
-                task(...taskParam, result);
-            } catch (error) {
-                console.log(error.message);
-                console.log(error);
+    const { getError } = useContext(ErrorContext);
+
+    async function onSubmit(e) {
+        e.preventDefault();
+        try {
+            if (values) {
+                validationHook(values);
             }
-        };
-        fetch();
+            const result = await request(...requestParam);
+            if (result) {
+                task(...taskParam, result);
+            } else {
+                task(...taskParam);
+            }
+            if (navigate) {
+                navigate(adress);
+            }
+        } catch (error) {
+            console.log(error.message);
+            console.log(error);
+            getError(error);
+        }
+    }
 
-        return () => {
-            controller.abort();
-        };
 
-        // eslint-disable-next-line     
-    }, []);
+    return onSubmit;
 
 };
