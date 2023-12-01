@@ -17,7 +17,6 @@ import Logout from './components/auth/LogoutComponent';
 
 import Create from './components/action/CreateComponent';
 import EditItem from './components/action/EditItemComponent';
-import CloseOffer from './components/action/CloseOfferComponent';
 import Search from './components/action/SearchComponent';
 import { SearchTable } from './components/action/SearchTable';
 
@@ -60,7 +59,6 @@ function App() {
                     <Route element={<AuthGuard />}>
                       <Route path='/create' element={<Create />} />
                       <Route path='/edit/:id' element={<EditItem />} />
-                      <Route path='/userAction/:id' element={<CloseOffer />} />
                       <Route path='/closed' element={<UserClosedOffers />} />
                     </Route>
 

@@ -1,24 +1,29 @@
 import { useContext } from 'react';
 import { ErrorContext } from '../contexts/ErrorContext';
 import { validationHook } from './validationHook';
+import { useNavigate } from 'react-router-dom';
 
-export const useDataHook = (request, task, taskParam, requestParam, values, navigate, adress) => {
+export const useDataHook = (request, task, taskParam, requestParam, adress, values) => {
     console.log('here');
     const { getError } = useContext(ErrorContext);
-
+    const navigate = useNavigate();
     async function onSubmit(e) {
-        e.preventDefault();
+        if(e){
+            e.preventDefault();
+        }
         try {
             if (values) {
                 validationHook(values);
             }
             const result = await request(...requestParam);
+            console.log(result);
             if (result) {
-                task(...taskParam, result);
-            } else {
-                task(...taskParam);
+                taskParam.push(result);
             }
-            if (navigate) {
+
+            task(...taskParam);
+
+            if (adress) {
                 navigate(adress);
             }
         } catch (error) {

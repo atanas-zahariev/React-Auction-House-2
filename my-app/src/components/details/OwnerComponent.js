@@ -1,22 +1,43 @@
 import { useContext, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
+import { DataContext } from '../../contexts/DataContext';
 import { ErrorContext } from '../../contexts/ErrorContext';
+
+import { useApi } from '../../services/dataService';
 import { getUser } from '../../services/utility';
 
+import reducerTasks from '../../reducers/reducerTasks';
+
+import { useDataHook } from '../../hooks/dataHook';
+
 export default function Owner({ item }) {
-    const { getError } = useContext(ErrorContext);
     const navigate = useNavigate();
+
     const [checkForuser, setCheck] = useState(false);
-    
+
+    const { getUserAction } = useApi();
+
+    const { getError } = useContext(ErrorContext);
+
+    const { removeProductFromList } = reducerTasks();
+
+    const { title, imgUrl, category, description, price, bider, _id } = item.item;
+
+    const { user } = item;
+
+    const { dispatch } = useContext(DataContext);
+
+    const onSubmit = useDataHook(getUserAction, removeProductFromList, [dispatch, _id], [_id], '/closed');
+
     if (checkForuser) {
         navigate('/logout');
     }
-    
-    
+
+
     function deleteItem() {
         const hasUser = getUser();
-        
+
         if (!hasUser) {
             setCheck(true);
             return;
@@ -28,10 +49,6 @@ export default function Owner({ item }) {
 
 
 
-
-    const { title, imgUrl, category, description, price, bider, _id } = item.item;
-
-    const { user } = item;
 
     return (
         <section id="catalog-section">
@@ -66,7 +83,7 @@ export default function Owner({ item }) {
                                 {bider ?
                                     <div>
                                         Bid by <strong>{bider.firstname} {bider.lastname}</strong>
-                                        <Link to={`/userAction/${_id}`} className="action pad-med cta">Close Auction</Link>
+                                        <Link onClick={onSubmit} className="action pad-med cta">Close Auction</Link>
                                     </div> :
                                     <div>
                                         No bids

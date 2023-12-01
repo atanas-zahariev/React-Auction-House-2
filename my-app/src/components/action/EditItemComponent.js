@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
 import { DataContext } from '../../contexts/DataContext';
 import { ErrorContext } from '../../contexts/ErrorContext';
@@ -10,8 +10,6 @@ import reducerTasks from '../../reducers/reducerTasks';
 import Spinner from '../common/Spiner';
 import { useDataHook } from '../../hooks/dataHook';
 
-let controller = new AbortController();
-
 export default function EditItem() {
     const { cleanError } = useContext(ErrorContext);
 
@@ -20,8 +18,6 @@ export default function EditItem() {
     const { dispatch, getItem } = useContext(DataContext);
 
     const { id } = useParams();
-
-    const navigate = useNavigate();
 
     const { updateItem } = reducerTasks();
 
@@ -41,11 +37,6 @@ export default function EditItem() {
         cleanError();
 
         setOldItem(item);
-
-        return () => {
-            controller.abort();
-            controller = new AbortController();
-        };
         // eslint-disable-next-line
     }, [item]);
 
@@ -58,10 +49,9 @@ export default function EditItem() {
         onEdit,
         updateItem,
         [dispatch, id, oldItem],
-        [id, oldItem, controller.signal],
-        oldItem,
-        navigate,
-        `/details/${id}`
+        [id, oldItem],
+        `/details/${id}`,
+        oldItem
     );
 
     if (oldItem) {

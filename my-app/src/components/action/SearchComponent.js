@@ -1,12 +1,20 @@
-import { useContext, useRef } from 'react';
+import { useContext, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { DataContext } from '../../contexts/DataContext';
+import { ErrorContext } from '../../contexts/ErrorContext';
 
 export default function Search() {
     const navigate = useNavigate();
 
-    const { _items, setSearchItems} = useContext(DataContext);
+    const { cleanError } = useContext(ErrorContext);
+
+    useEffect(() => {
+        cleanError();
+        // eslint-disable-next-line
+    }, []);
+
+    const { _items, setSearchItems } = useContext(DataContext);
 
     const search = ({ category, lower, upper }) => {
         let selectItems;
@@ -68,7 +76,7 @@ export default function Search() {
                     <label>
                         <span>Set a price limit</span>
                         <input id="rangeValue" type="number" name="upper" onChange={getFormValue} />
-                    </label>                   
+                    </label>
 
                     <div className="align-center">
                         <input className="action" type="submit" value="Select" />

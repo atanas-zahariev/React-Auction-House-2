@@ -35,7 +35,6 @@ itemControler.get('/catalog', async (req, res) => {
         items,
         user: req.user
     }
-    console.log(req.user);
     res.json(obj)
 });
 
@@ -95,7 +94,6 @@ itemControler.post('/edit/:id',hasUser(), async (req, res) => {
 
 
 itemControler.get('/delete/:id',hasUser(), async (req, res) => {
-    console.log('delete');
 
     try {
         await deleteItem(req.params.id);
