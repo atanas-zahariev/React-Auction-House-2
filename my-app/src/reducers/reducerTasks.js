@@ -4,6 +4,10 @@ export default function reducerTasks() {
 
     };
 
+    const addUser = (dispatch, result) => {
+        dispatch({ type: 'USER', user: result });
+    };
+
     const setBider = (dispatch, id, result) => {
         dispatch({ type: 'UPDATE_BIDER', id: id, updatedItem: result.updatedItem });
     };
@@ -12,17 +16,18 @@ export default function reducerTasks() {
         dispatch({ type: 'UPDATE_BIDER', id: id, updatedItem: oldItem });
     };
 
-    const createItem = (dispatch,result) => {
-        dispatch({type:'ADD_ITEM',result:result});
+    const createItem = (dispatch, result) => {
+        dispatch({ type: 'ADD_ITEM', result: result });
     };
 
-    const removeProductFromList = (dispatch,_id) => {
-        dispatch({type:'REMOVE_ITEM',id:_id});
+    const removeProductFromList = (dispatch, _id) => {
+        dispatch({ type: 'REMOVE_ITEM', id: _id });
     };
 
 
     return {
         getCatlogList,
+        addUser,
         setBider,
         updateItem,
         createItem,
