@@ -4,6 +4,7 @@ import FinishedOffers from './FinishedOffersComponent';
 
 import { ErrorContext } from '../../contexts/ErrorContext';
 import { useApi } from '../../services/dataService';
+import { useDataHook } from '../../hooks/dataHook';
 
 export default function UserClosedOffers() {
     const { getError, cleanError } = useContext(ErrorContext);
@@ -12,18 +13,12 @@ export default function UserClosedOffers() {
 
     const [offers, setOffers] = useState({});
 
+    const onSubmit = useDataHook(getTotalAction,setOffers,[],[]);
+
     useEffect(() => {
         cleanError();
-        async function fetchData() {
-            try {
-                const result = await getTotalAction();
-                setOffers(result);
-            } catch (error) {
-                getError(error);
-            }
-        }
-
-        fetchData();
+        
+        onSubmit();
         // eslint-disable-next-line
     }, [getError]);
 

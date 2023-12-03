@@ -21,8 +21,10 @@ export const useDataHook = (request, task, taskParam, requestParam, adress, valu
             if (result) {
                 taskParam.push(result);
             }
-             
-            task(...taskParam);
+
+            if(task){
+                task(...taskParam);
+            }             
 
             if (adress) {
                 navigate(adress);
