@@ -2,7 +2,6 @@ import { clearUser, setUserData } from './utility';
 import { useRequest } from '../hooks/apiHook';
 
 export const useApi = () => {
-
     const { get, post } = useRequest();
 
     const endpoints = {
@@ -46,7 +45,7 @@ export const useApi = () => {
         return result;
     }
 
-    async function offer(id, data) {
+    async function offer(data, id) {
         const result = await post(endpoints.getSpecificDataWithId + id, data);
         return result;
     }

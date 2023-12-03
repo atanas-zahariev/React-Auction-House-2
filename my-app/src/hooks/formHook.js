@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useDataHook } from './dataHook';
 
-const useFormHook = (initial, request, task, dispatch, adress, id,setAuth) => {
+const useFormHook = (initial, request, task, dispatch, adress, id, setAuth,validationParams) => {
 
     const [formValue, setFormValue] = useState(initial);
 
@@ -10,14 +10,20 @@ const useFormHook = (initial, request, task, dispatch, adress, id,setAuth) => {
     };
 
     const taskParam = [dispatch];
+
     const requestParam = [formValue];
 
+    let validationValues = formValue;
+
+    if(validationParams){
+        validationValues = {...validationValues,...validationParams};
+    }
     if (id) {
         taskParam.push(id);
         requestParam.push(id);
     }
 
-    const onSubmit = useDataHook(request, task, taskParam, requestParam, adress, formValue,setAuth);
+    const onSubmit = useDataHook(request, task, taskParam, requestParam, adress, validationValues, setAuth);
 
     return {
         onSubmit,

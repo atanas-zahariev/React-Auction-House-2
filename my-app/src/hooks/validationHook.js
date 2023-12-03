@@ -7,14 +7,13 @@ export const validationHook = (value) => {
 
     const REGEX_FOR_Email = /^[A-Za-z]+@[A-Za-z]+\.[A-Za-z]+$/m;
 
-
-    const { title, category, imgUrl, price, description, email, firstname, lastname, password, repass } = value;
-
+    const { title, category, imgUrl, price, description, email, firstname, lastname, password, repass, oldPrice } = value;
 
     if (Object.values(value).some(x => x === '')) {
         error = ['All fields are required.'];
         throw error;
     }
+
 
     if (email) {
         if (!REGEX_FOR_Email.test(email)) {
@@ -76,7 +75,13 @@ export const validationHook = (value) => {
         if (Number(price) <= 0) {
             error = ['This price cannot be real.'];
             throw error;
+        }
+    }
 
+    if(oldPrice){
+        if(Number(price) <= Number(oldPrice)){
+            error = ['Your price must be hire see exesting one!'];
+            throw error;
         }
     }
 

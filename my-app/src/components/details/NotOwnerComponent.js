@@ -1,11 +1,11 @@
-import { useContext, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useContext } from 'react';
 
 import { DataContext } from '../../contexts/DataContext';
 import { ErrorContext } from '../../contexts/ErrorContext';
 
 import { useApi } from '../../services/dataService';
 import reducerTasks from '../../reducers/reducerTasks';
+import useFormHook from '../../hooks/formHook';
 
 export default function NotOwner({ item, id }) {
     const { offer } = useApi();
@@ -13,52 +13,41 @@ export default function NotOwner({ item, id }) {
     const { dispatch } = useContext(DataContext);
 
     const { setBider } = reducerTasks();
-    
+
     const { user } = item;
 
     const { title, imgUrl, category, description, price, bider, _id } = item.item;
 
-    const { getError,cleanError } = useContext(ErrorContext);
-
-    const navigate = useNavigate();
+    const { cleanError } = useContext(ErrorContext);
 
     const currentUser = user?._id;
 
     const isBider = bider?._id === currentUser;
 
-    const [newOffer, setOffer] = useState({
-        price: ''
-    });
+    const newOffer = {
+        title,
+        imgUrl,
+        category,
+        description,
+        price: '',
+        _id
+    };
 
-    function getOffer(e) {
-        setOffer(() => ({ ...newOffer, [e.target.name]: e.target.value }));
-    }
+    const validationParams = { oldPrice: price };
 
-    async function onSubmit(e) {
-        e.preventDefault();
-
-        if (Number(newOffer.price) <= 0) {
-            getError(['Price must be greather than zero']);
-            return;
-        }
-
-        if (Number(newOffer.price) <= price) {
-            getError(['You bid must be higher, see the existing one.']);
-            return;
-        }
-
-        item.item.price = Number(newOffer.price);
-
-        try {
-            const result = await offer(_id, item.item);
-            setBider(dispatch, id, result);
-            cleanError();
-        } catch (error) {
-            getError(error);
-        }
-
-        navigate(`/details/${_id}`);
-    }
+    const {
+        onSubmit,
+        changeHandler,
+    } = useFormHook(
+        newOffer,
+        offer,
+        setBider,
+        dispatch,
+        `/details/${_id}`,
+        id,
+        cleanError,
+        validationParams
+    );
 
     return (
         <section id="catalog-section">
@@ -91,7 +80,7 @@ export default function NotOwner({ item, id }) {
                                             You are currently the <strong>highest bidder</strong> for this auction
                                         </div> :
                                         <form className="vertical" onSubmit={onSubmit}>
-                                            <label><span>Bid amount</span><input type="number" name="price" onChange={getOffer} /></label>
+                                            <label><span>Bid amount</span><input type="number" name="price" onChange={changeHandler} /></label>
                                             <input className="action" type="submit" value="Place bid" />
                                         </form>
                                     }
