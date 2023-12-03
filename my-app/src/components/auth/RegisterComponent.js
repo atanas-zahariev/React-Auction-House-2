@@ -1,33 +1,32 @@
-import { useContext, useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useContext, useEffect } from 'react';
 
 import { AuthContext } from '../../contexts/AuthContext';
-import { ErrorContext } from '../../contexts/ErrorContext';
 import { DataContext } from '../../contexts/DataContext';
+import { ErrorContext } from '../../contexts/ErrorContext';
 
 import { useApi } from '../../services/dataService';
-import { validationHook } from '../../hooks/validationHook';
+import reducerTasks from '../../reducers/reducerTasks';
+import useFormHook from '../../hooks/formHook';
 
 export default function Register() {
   const { onRegisterSubmit } = useContext(AuthContext);
+  
+  const { dispatch } = useContext(DataContext);
 
-  const { getError, cleanError } = useContext(ErrorContext);
+  const { cleanError } = useContext(ErrorContext);
 
   const { register } = useApi();
 
-  const { dispatch } = useContext(DataContext);
+  const { addUser } = reducerTasks();
 
-  const [values, setValues] = useState({
+  const values = {
     email: '',
     firstname: '',
     lastname: '',
     password: '',
     repass: '',
-  });
+  };
 
-
-
-  const navigate = useNavigate();
 
   useEffect(() => {
 
@@ -36,24 +35,18 @@ export default function Register() {
   }, []);
 
 
-
-  function getFormValue(e) {
-    setValues(state => ({ ...state, [e.target.name]: e.target.value }));
-  }
-
-  async function onSubmit(e) {
-    e.preventDefault();
-
-    try {
-      validationHook(values);
-      const result = await register(values);
-      dispatch({ type: 'USER', user: result });
-      onRegisterSubmit();
-      navigate('/');
-    } catch (error) {
-      getError(error);
-    }
-  }
+  const {
+    onSubmit,
+    changeHandler,
+  } = useFormHook(
+    values,
+    register,
+    addUser,
+    dispatch,
+    '/',
+    undefined,
+    onRegisterSubmit
+  );
 
   return (
     <section id="register-section" className="narrow">
@@ -66,23 +59,23 @@ export default function Register() {
 
           <label>
             <span>Email</span>
-            <input type="text" name="email" onChange={getFormValue} />
+            <input type="text" name="email" onChange={changeHandler} />
           </label>
           <label>
             <span>First name</span>
-            <input type="text" name="firstname" onChange={getFormValue} />
+            <input type="text" name="firstname" onChange={changeHandler} />
           </label>
           <label>
             <span>Last name</span>
-            <input type="text" name="lastname" onChange={getFormValue} />
+            <input type="text" name="lastname" onChange={changeHandler} />
           </label>
           <label>
             <span>Password</span>
-            <input type="password" name="password" onChange={getFormValue} />
+            <input type="password" name="password" onChange={changeHandler} />
           </label>
           <label>
             <span>Repeat Password</span>
-            <input type="password" name="repass" onChange={getFormValue} />
+            <input type="password" name="repass" onChange={changeHandler} />
           </label>
 
           <div className="align-center">
