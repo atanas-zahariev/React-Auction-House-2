@@ -1,35 +1,25 @@
 import { useContext, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 
 import { DataContext } from '../../contexts/DataContext';
 import { AuthContext } from '../../contexts/AuthContext';
-import { ErrorContext } from '../../contexts/ErrorContext';
 
 import { useApi } from '../../services/dataService';
+import reducerTasks from '../../reducers/reducerTasks';
+import { useDataHook } from '../../hooks/dataHook';
 
 export default function Logout() {
+    const { dispatch } = useContext(DataContext);
+
     const { onLogout } = useContext(AuthContext);
 
     const { logout } = useApi();
 
-    const { dispatch } = useContext(DataContext);
+    const { removeUser } = reducerTasks();
 
-    const { getError } = useContext(ErrorContext);
-
-    const navigate = useNavigate();
+    const onSubmit = useDataHook(logout, removeUser, [dispatch], [], '/', undefined, onLogout);
 
     useEffect(() => {
-        async function fetchData() {
-            try {
-                await logout();
-            } catch (error) {
-                getError(error);
-            }
-        }
-        fetchData();
-        dispatch({ type: 'LOGOUT', user: '' });
-        onLogout();
-        navigate('/');
+        onSubmit();
         // eslint-disable-next-line
     }, []);
 }

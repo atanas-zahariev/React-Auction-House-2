@@ -8,6 +8,10 @@ export default function reducerTasks() {
         dispatch({ type: 'USER', user: result });
     };
 
+    const removeUser = (dispatch) => {
+        dispatch({ type: 'LOGOUT' });
+    };
+
     const setBider = (dispatch, id, result) => {
         dispatch({ type: 'UPDATE_BIDER', id: id, updatedItem: result.updatedItem });
     };
@@ -28,6 +32,7 @@ export default function reducerTasks() {
     return {
         getCatlogList,
         addUser,
+        removeUser,
         setBider,
         updateItem,
         createItem,
