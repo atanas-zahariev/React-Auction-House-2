@@ -1,54 +1,47 @@
-import { useContext, useEffect, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useContext, useEffect } from 'react';
 
 import { AuthContext } from '../../contexts/AuthContext';
 import { DataContext } from '../../contexts/DataContext';
 import { ErrorContext } from '../../contexts/ErrorContext';
 
 import { useApi } from '../../services/dataService';
-import { validationHook } from '../../hooks/validationHook';
+import reducerTasks from '../../reducers/reducerTasks';
+import useFormHook from '../../hooks/formHook';
 
 export default function Login() {
     const { onLoginSubmit } = useContext(AuthContext);
 
-    const { getError, cleanError } = useContext(ErrorContext);
+    const { cleanError } = useContext(ErrorContext);
 
     const { login } = useApi();
 
+    const { addUser } = reducerTasks();
+
     const { dispatch } = useContext(DataContext);
 
-
-    const values = useRef({
+    const values = {
         email: '',
         password: ''
-    });
+    };
 
-    const navigate = useNavigate();
 
     useEffect(() => {
         cleanError();
         // eslint-disable-next-line
     }, []);
 
-
-
-    function getFormValue(e) {
-        values.current[e.target.name] = e.target.value;
-    }
-
-    async function onSubmit(e) {
-        e.preventDefault();
-
-        try {
-            validationHook(values.current);
-            const result = await login(values.current);
-            dispatch({ type: 'USER', user: result });
-            onLoginSubmit();
-            navigate('/');
-        } catch (error) {
-            getError(error);
-        }
-    }
+    const {
+        onSubmit,
+        changeHandler,
+    } = useFormHook(
+        values,
+        login,
+        addUser,
+        dispatch,
+        '/',
+        undefined,
+        onLoginSubmit
+    );
 
     return (
         <section id="login-section" className="narrow">
@@ -61,11 +54,11 @@ export default function Login() {
 
                     <label>
                         <span>Email</span>
-                        <input type="text" name="email" onChange={getFormValue} />
+                        <input type="text" name="email" onChange={changeHandler} />
                     </label>
                     <label>
                         <span>Password</span>
-                        <input type="password" name="password" onChange={getFormValue} />
+                        <input type="password" name="password" onChange={changeHandler} />
                     </label>
 
                     <div className="align-center">
