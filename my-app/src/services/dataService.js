@@ -76,7 +76,7 @@ export const useApi = () => {
         return result;
     }
 
-    async function getUserAction(id, signal) {
+    async function getUserAction(id) {
         const result = await get(endpoints.action + id);
         return result;
     }

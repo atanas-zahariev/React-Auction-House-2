@@ -4,9 +4,9 @@ import { validationHook } from './validationHook';
 import { useNavigate } from 'react-router-dom';
 
 export const useDataHook = (request, task, taskParam, requestParam, adress, values) => {
-    console.log('here');
-    const { getError } = useContext(ErrorContext);
     const navigate = useNavigate();
+    const { getError } = useContext(ErrorContext);
+    
     async function onSubmit(e) {
         if(e){
             e.preventDefault();
@@ -16,11 +16,10 @@ export const useDataHook = (request, task, taskParam, requestParam, adress, valu
                 validationHook(values);
             }
             const result = await request(...requestParam);
-            console.log(result);
             if (result) {
                 taskParam.push(result);
             }
-
+            console.log(taskParam);
             task(...taskParam);
 
             if (adress) {

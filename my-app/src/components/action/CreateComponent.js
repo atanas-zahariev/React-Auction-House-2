@@ -1,56 +1,45 @@
-import { useContext, useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useContext, useEffect } from 'react';
 
-import { ErrorContext } from '../../contexts/ErrorContext';
 import { DataContext } from '../../contexts/DataContext';
+import { ErrorContext } from '../../contexts/ErrorContext';
 
 import { useApi } from '../../services/dataService';
 import reducerTasks from '../../reducers/reducerTasks';
-import { validationHook } from '../../hooks/validationHook';
+import useFormHook from '../../hooks/formHook';
 
 export default function Create() {
-    const { getError, cleanError } = useContext(ErrorContext);
-    
-    const navigate = useNavigate();
+    const { dispatch } = useContext(DataContext);
 
-    const {addInSystem} = useApi();
+    const { cleanError } = useContext(ErrorContext);
 
-    const {dispatch} = useContext(DataContext);
+    const { addInSystem } = useApi();
 
-    const {createItem} = reducerTasks();
+    const { createItem } = reducerTasks();
 
-
-    const [values, setValues] = useState({
+    const values = {
         title: '',
         category: 'estate',
         imgUrl: '',
         price: '',
         description: '',
-    });
+    };
 
     useEffect(() => {
         cleanError();
         // eslint-disable-next-line
     }, []);
 
-
-
-    const changeHandler = (e) => {
-        setValues(state => ({ ...state, [e.target.name]: e.target.value }));
-    };
-
-    async function onSubmit(e) {
-        e.preventDefault();       
-        
-        try {
-            validationHook(values);
-            const result = await addInSystem(values);
-            createItem(dispatch,result);
-            navigate('/catalog');
-        } catch (error) {
-            getError(error);
-        }
-    }
+    const {
+        onSubmit,
+        changeHandler,
+        formValue
+    } = useFormHook(
+        values,
+        addInSystem,
+        createItem,
+        dispatch,
+        '/catalog'
+    );
 
     return (
         <section id="create-section" className="">
@@ -67,7 +56,7 @@ export default function Create() {
                             <input type="text" name="title" onChange={changeHandler} /></label>
                         <label>
                             <span>Category</span>
-                            <select name="category" value={values.category} onChange={changeHandler}>
+                            <select name="category" value={formValue.category} onChange={changeHandler}>
                                 <option value="estate">Real Estate</option>
                                 <option value="vehicles">Vehicles</option>
                                 <option value="furniture">Furniture</option>

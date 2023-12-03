@@ -13,6 +13,7 @@ export default function dataReducer(initial, action) {
             return { ...initial, items: initial.items.map(x => x._id === action.id ? action.updatedItem : x) };
         }
         case 'ADD_ITEM': {
+            console.log(action.result);
             return { ...initial, items: [...initial.items, action.result] };
         }
         case 'REMOVE_ITEM': {
