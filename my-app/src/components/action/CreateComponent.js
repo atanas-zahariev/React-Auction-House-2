@@ -37,7 +37,8 @@ export default function Create() {
         values,
         addInSystem,
         createItem,
-        dispatch,
+        [dispatch],
+        undefined,
         '/catalog'
     );
 

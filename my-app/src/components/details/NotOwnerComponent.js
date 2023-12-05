@@ -42,9 +42,9 @@ export default function NotOwner({ item, id }) {
         newOffer,
         offer,
         setBider,
-        dispatch,
-        `/details/${_id}`,
+        [dispatch, id],
         id,
+        `/details/${_id}`,
         cleanError,
         validationParams
     );

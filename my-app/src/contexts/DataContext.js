@@ -33,11 +33,11 @@ export const DataProvider = ({
 
     const controller = new AbortController();
     const signal = controller.signal;
-
-    const onSubmit = useDataHook(getAllDataInSystem,getCatlogList,[dispatch],[signal]);
+    
+    const onSubmit = useDataHook(getAllDataInSystem, getCatlogList, [dispatch], [signal]);
 
     useEffect(() => {
-         onSubmit();
+        onSubmit();
 
         return () => {
             controller.abort();
@@ -66,7 +66,7 @@ export const DataProvider = ({
         dispatch,
         getItem,
         searchItems,
-        setSearchItems
+        setSearchItems,
     };
 
     return (

@@ -5,7 +5,7 @@ import { ErrorContext } from '../contexts/ErrorContext';
 
 import { validationHook } from './validationHook';
 
-export const useDataHook = (request, task, taskParam, requestParam, adress, values, setAuth) => {
+export const useDataHook = (request, task, taskParam, requestParam, adress, values, functionalParam) => {
     const navigate = useNavigate();
     
     const { getError } = useContext(ErrorContext);
@@ -33,8 +33,8 @@ export const useDataHook = (request, task, taskParam, requestParam, adress, valu
                 navigate(adress);
             }
 
-            if (setAuth) {
-                setAuth();
+            if (functionalParam) {
+                functionalParam();
             }
         } catch (error) {
             getError(error);

@@ -42,9 +42,9 @@ export default function Register() {
     values,
     register,
     addUser,
-    dispatch,
-    '/',
+    [dispatch],
     undefined,
+    '/',
     onRegisterSubmit
   );
 

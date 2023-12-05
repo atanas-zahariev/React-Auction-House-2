@@ -11,12 +11,12 @@ import Spinner from '../common/Spiner';
 import { useDataHook } from '../../hooks/dataHook';
 
 export default function EditItem() {
+    const { dispatch, getItem } = useContext(DataContext);
+
     const { cleanError } = useContext(ErrorContext);
 
     const { onEdit } = useApi();
-
-    const { dispatch, getItem } = useContext(DataContext);
-
+   
     const { id } = useParams();
 
     const { updateItem } = reducerTasks();
@@ -36,7 +36,9 @@ export default function EditItem() {
     useEffect(() => {
         cleanError();
 
-        setOldItem(item);
+        if (item) {
+            setOldItem(item);
+        }
         // eslint-disable-next-line
     }, [item]);
 
@@ -44,17 +46,16 @@ export default function EditItem() {
         setOldItem(state => ({ ...state, [e.target.name]: e.target.value }));
     };
 
-
     const onSubmit = useDataHook(
         onEdit,
         updateItem,
         [dispatch, id, oldItem],
-        [id, oldItem],
+        [oldItem, id],
         `/details/${id}`,
         oldItem
     );
 
-    if (oldItem) {
+    if (item) {
 
         return (
             <section id="create-section">

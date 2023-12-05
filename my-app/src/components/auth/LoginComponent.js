@@ -37,9 +37,9 @@ export default function Login() {
         values,
         login,
         addUser,
-        dispatch,
-        '/',
+        [dispatch],
         undefined,
+        '/',
         onLoginSubmit
     );
 
