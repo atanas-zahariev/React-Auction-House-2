@@ -4,6 +4,7 @@ import { useApi } from '../services/dataService';
 
 import dataReducer from '../reducers/dataReducer';
 import reducerTasks from '../reducers/reducerTasks';
+import { useDataHook } from '../hooks/dataHook';
 
 export const DataContext = createContext();
 
@@ -12,7 +13,9 @@ export const DataProvider = ({
     children,
 }) => {
     const { getAllDataInSystem } = useApi();
+
     const { getCatlogList } = reducerTasks();
+
     const initial = {};
 
     const [_items, dispatch] = useReducer(dataReducer, initial);
@@ -28,19 +31,13 @@ export const DataProvider = ({
         return [];
     });
 
-    useEffect(() => {
-        const controller = new AbortController();
-        const signal = controller.signal;
+    const controller = new AbortController();
+    const signal = controller.signal;
 
-        const fetch = async () => {
-            try {
-                const result = await getAllDataInSystem(signal);
-                getCatlogList(dispatch, result);
-            } catch (error) {
-                console.log(error.message);
-            }
-        };
-        fetch();
+    const onSubmit = useDataHook(getAllDataInSystem,getCatlogList,[dispatch],[signal]);
+
+    useEffect(() => {
+         onSubmit();
 
         return () => {
             controller.abort();

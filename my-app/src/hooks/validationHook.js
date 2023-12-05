@@ -80,7 +80,7 @@ export const validationHook = (value) => {
 
     if(oldPrice){
         if(Number(price) <= Number(oldPrice)){
-            error = ['Your price must be hire see exesting one!'];
+            error = ['Your price should be higher see existing.'];
             throw error;
         }
     }
@@ -91,7 +91,5 @@ export const validationHook = (value) => {
             throw error;
         };
     }
-
-
 
 };
