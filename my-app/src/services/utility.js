@@ -18,6 +18,6 @@ export function formHandller(callback) {
         const myForm = new FormData(event.target);
         const data = Object.fromEntries(myForm.entries());
 
-        callback(data, event.target);
+        callback(data);
     };
 }

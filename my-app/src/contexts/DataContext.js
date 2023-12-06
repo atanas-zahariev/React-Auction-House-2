@@ -1,4 +1,4 @@
-import { createContext, useEffect, useReducer, useState } from 'react';
+import { createContext, useEffect, useReducer } from 'react';
 
 import { useApi } from '../services/dataService';
 
@@ -20,20 +20,9 @@ export const DataProvider = ({
 
     const [_items, dispatch] = useReducer(dataReducer, initial);
 
-    const [searchItems, setSearchItems] = useState(() => {
-        const searchItemsState = sessionStorage.getItem('search');
-
-        if (searchItemsState) {
-            const hasSearchItems = JSON.parse(searchItemsState);
-
-            return hasSearchItems;
-        }
-        return [];
-    });
-
     const controller = new AbortController();
     const signal = controller.signal;
-    
+
     const onSubmit = useDataHook(getAllDataInSystem, getCatlogList, [dispatch], [signal]);
 
     useEffect(() => {
@@ -65,8 +54,8 @@ export const DataProvider = ({
         _items,
         dispatch,
         getItem,
-        searchItems,
-        setSearchItems,
+        // searchItems,
+        // setSearchItems,
     };
 
     return (
