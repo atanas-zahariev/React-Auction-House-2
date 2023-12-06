@@ -1,20 +1,35 @@
-import { useContext, useEffect, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useContext, useEffect, useState} from 'react';
 
 import { DataContext } from '../../contexts/DataContext';
 import { ErrorContext } from '../../contexts/ErrorContext';
 
+import { formHandller } from '../../services/utility';
+import { SearchTable } from './SearchTable';
+
 export default function Search() {
-    const navigate = useNavigate();
+    const { _items } = useContext(DataContext);
 
     const { cleanError } = useContext(ErrorContext);
 
     useEffect(() => {
         cleanError();
+
+        return () => {
+         sessionStorage.clear();
+        };
         // eslint-disable-next-line
     }, []);
 
-    const { _items, setSearchItems } = useContext(DataContext);
+    const [searchItems, setSearchItems] = useState(() => {
+        const searchItemsState = sessionStorage.getItem('search');
+
+        if (searchItemsState) {
+            const hasSearchItems = JSON.parse(searchItemsState);
+
+            return hasSearchItems;
+        }
+        return null;
+    });
 
     const search = ({ category, lower, upper }) => {
         let selectItems;
@@ -28,38 +43,23 @@ export default function Search() {
             selectItems = selectItems.filter(x => x.price <= Number(upper));
         }
 
-        setSearchItems(selectItems);
-
-        sessionStorage.setItem('search', JSON.stringify(selectItems));
+        setStateAndSession(setSearchItems, selectItems);
     };
 
-    const values = useRef({
-        category: 'estate',
-        lower: '',
-        upper: ''
-    });
 
-    function getFormValue(e) {
-        values.current[e.target.name] = e.target.value;
-    }
-
-    function onSubmit(e) {
-        e.preventDefault();
-        search(values.current);
-        navigate('/search/table');
-    }
+    const onSubmit = formHandller(search);
 
     return (
-        <section id="login-section" className="narrow">
+        <>
+        <section id="login-section" className="spaced">
 
-            <h1 className="item">Search</h1>
-
-            <div className="item padded align-center">
+            <h1 className="item narrow">Search</h1>
+            <div className="item padded align-center narrow">
 
                 <form className="aligned" onSubmit={onSubmit}>
                     <label>
                         <span>Choose category</span>
-                        <select name="category" onChange={getFormValue} >
+                        <select name="category"  >
                             <option value="estate">Real Estate</option>
                             <option value="vehicles">Vehicles</option>
                             <option value="furniture">Furniture</option>
@@ -70,12 +70,12 @@ export default function Search() {
 
                     <label>
                         <span>Set a price floor</span>
-                        <input id="lower-range" type="number" name="lower" onChange={getFormValue} />
+                        <input id="lower-range" type="number" name="lower" />
                     </label>
 
                     <label>
                         <span>Set a price limit</span>
-                        <input id="rangeValue" type="number" name="upper" onChange={getFormValue} />
+                        <input id="rangeValue" type="number" name="upper" />
                     </label>
 
                     <div className="align-center">
@@ -87,6 +87,15 @@ export default function Search() {
             </div>
 
         </section>
+
+            {searchItems && <SearchTable searchItems={searchItems} />}
+        </>
     );
 
+}
+
+function setStateAndSession(setSearchItems, selectItems) {
+    setSearchItems(selectItems);
+
+    sessionStorage.setItem('search', JSON.stringify(selectItems));
 }

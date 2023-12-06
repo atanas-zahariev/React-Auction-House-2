@@ -1,15 +1,9 @@
-import { useContext } from 'react';
-
-import { DataContext } from '../../contexts/DataContext';
-
 import { Item } from '../common/Catalog/ItemComponent';
 
-export const SearchTable = () => {
-    const {searchItems} = useContext(DataContext);
-
+export const SearchTable = ({searchItems}) => {
     return (
         <section id="catalog-section" className="spaced">
-            {searchItems.length > 0 ?
+            {searchItems?.length > 0 ?
                 <ul className="catalog cards">
                     {searchItems.map(x => <Item key={x._id} {...x} />)}
                 </ul> :
@@ -21,4 +15,3 @@ export const SearchTable = () => {
         </section>
     );
 };
-
