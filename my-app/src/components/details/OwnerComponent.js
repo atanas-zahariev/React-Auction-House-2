@@ -14,7 +14,7 @@ import { useDataHook } from '../../hooks/dataHook';
 export default function Owner({ item }) {
     const navigate = useNavigate();
 
-    const [checkForuser, setCheck] = useState(false);
+    const [checkForUser, setCheck] = useState(false);
 
     const { getUserAction } = useApi();
 
@@ -30,7 +30,7 @@ export default function Owner({ item }) {
 
     const onSubmit = useDataHook(getUserAction, removeProductFromList, [dispatch, _id], [_id], '/closed');
 
-    if (checkForuser) {
+    if (checkForUser) {
         navigate('/logout');
     }
 
