@@ -24,7 +24,6 @@ export default function Catalog() {
     },[]);
 
     if (didSetInitialData) {
-        console.log('if');
         didSetInitialData = false;
         return (
             <section id="catalog-section" className="spaced">
@@ -43,7 +42,6 @@ export default function Catalog() {
             </section>
         );
     } else {
-        console.log('else');
         return (
             <Follow />
         );
