@@ -18,7 +18,6 @@ import Logout from './components/auth/LogoutComponent';
 import Create from './components/action/CreateComponent';
 import EditItem from './components/action/EditItemComponent';
 import Search from './components/action/SearchComponent';
-import { SearchTable } from './components/action/SearchTable';
 
 import Details from './components/details/DetailsComponent';
 
@@ -46,7 +45,6 @@ function App() {
                     <Route path='/' element={<Home />} />
                     <Route path='/catalog' element={<Catalog />} />
                     <Route path='/search' element={<Search />} />
-                    <Route path='/search/table' element={<SearchTable />} />
                     <Route path='/details/:id' element={<Details />} />
 
                     <Route element={<GuestGuard />}>

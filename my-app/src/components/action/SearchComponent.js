@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState} from 'react';
+import { useContext, useEffect, useState } from 'react';
 
 import { DataContext } from '../../contexts/DataContext';
 import { ErrorContext } from '../../contexts/ErrorContext';
@@ -14,8 +14,11 @@ export default function Search() {
     useEffect(() => {
         cleanError();
 
+        const select = document.getElementById('select');
+        select.value = '';
+
         return () => {
-         sessionStorage.clear();
+            sessionStorage.clear();
         };
         // eslint-disable-next-line
     }, []);
@@ -31,19 +34,39 @@ export default function Search() {
         return null;
     });
 
-    const search = ({ category, lower, upper }) => {
+
+    const search = (data, event) => {
+        const searchTarget = Object.fromEntries(Object.entries(data).filter(x => x[1] !== ''));
+
         let selectItems;
-        selectItems = _items.items.filter(x => x.category === category);
 
-        if (lower) {
-            selectItems = selectItems.filter(x => x.price >= Number(lower));
+        let point;
+        for (const field in searchTarget) {
+            if (!point) {
+                if (field === 'lower') {
+                    selectItems = _items.items.filter(x => x.price >= Number(searchTarget[field]));
+                    point = true;
+                } else if (field === 'upper') {
+                    selectItems = _items.items.filter(x => x.price <= Number(searchTarget[field]));
+                    point = true;
+                } else {
+                    selectItems = _items.items.filter(x => x.category === searchTarget[field]);
+                    point = true;
+                }
+            } else if (point) {
+                if (field === 'lower') {
+                    selectItems = selectItems.filter(x => x.price >= searchTarget[field]);
+                } else if (field === 'upper') {
+                    selectItems = selectItems.filter(x => x.price <= searchTarget[field]);
+                }
+            }
         }
 
-        if (upper) {
-            selectItems = selectItems.filter(x => x.price <= Number(upper));
-        }
+        setSearchItems(selectItems);
 
-        setStateAndSession(setSearchItems, selectItems);
+        selectItems ? sessionStorage.setItem('search', JSON.stringify(selectItems)) : sessionStorage.clear();
+
+        Array.from(event.target).forEach((e) => (e.value = ''));
     };
 
 
@@ -51,51 +74,46 @@ export default function Search() {
 
     return (
         <>
-        <section id="login-section" className="spaced">
+            <section id="login-section" className="spaced">
 
-            <h1 className="item narrow">Search</h1>
-            <div className="item padded align-center narrow">
+                <h1 className="item narrow">Search</h1>
+                <div className="item padded align-center narrow">
 
-                <form className="aligned" onSubmit={onSubmit}>
-                    <label>
-                        <span>Choose category</span>
-                        <select name="category"  >
-                            <option value="estate">Real Estate</option>
-                            <option value="vehicles">Vehicles</option>
-                            <option value="furniture">Furniture</option>
-                            <option value="electronics">Electronics</option>
-                            <option value="other">Other</option>
-                        </select>
-                    </label>
+                    <form className="aligned" onSubmit={onSubmit}>
+                        <label>
+                            <span>Choose Category</span>
+                            <select name="category" id='select'>
+                                <option value="estate">Real Estate</option>
+                                <option value="vehicles">Vehicles</option>
+                                <option value="furniture">Furniture</option>
+                                <option value="electronics">Electronics</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </label>
 
-                    <label>
-                        <span>Set a price floor</span>
-                        <input id="lower-range" type="number" name="lower" />
-                    </label>
+                        <label>
+                            <span>Set a Price Floor</span>
+                            <input id="lower-range" type="number" name="lower" />
+                        </label>
 
-                    <label>
-                        <span>Set a price limit</span>
-                        <input id="rangeValue" type="number" name="upper" />
-                    </label>
+                        <label>
+                            <span>Set a Price Limit</span>
+                            <input id="rangeValue" type="number" name="upper" />
+                        </label>
 
-                    <div className="align-center">
-                        <input className="action" type="submit" value="Select" />
-                    </div>
+                        <div className="align-center">
+                            <button className="action">Select</button>
+                        </div>
 
-                </form>
 
-            </div>
+                    </form>
 
-        </section>
+                </div>
+
+            </section>
 
             {searchItems && <SearchTable searchItems={searchItems} />}
         </>
     );
 
-}
-
-function setStateAndSession(setSearchItems, selectItems) {
-    setSearchItems(selectItems);
-
-    sessionStorage.setItem('search', JSON.stringify(selectItems));
 }
