@@ -54,8 +54,6 @@ export const DataProvider = ({
         _items,
         dispatch,
         getItem,
-        // searchItems,
-        // setSearchItems,
     };
 
     return (
