@@ -8,6 +8,7 @@ import Error from './component/common/ErrorComponent';
 import Login from './component/auth/LoginComponent';
 import { ErrorProvider } from './context/ErrorContext';
 import Logout from './component/auth/LogoutComponent';
+import Register from './component/auth/RegisterComponent';
 
 function App() {
 
@@ -20,6 +21,7 @@ function App() {
         <main>
           <Routes>
             <Route path='/' element={<Home />} />
+            <Route path='/register' element={<Register />} />
             <Route path='/login' element={<Login />} />
             <Route path='/logout' element={<Logout />} />
             <Route path='*' element={<Default />} />

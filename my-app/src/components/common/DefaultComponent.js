@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 
 export const Default = () => {
     return (
-        <section id="catalog-section" class="narrow align-center padded">
+        <section id="catalog-section" className="narrow align-center padded">
 
             <h1 class="item">404 Not Found</h1>
 

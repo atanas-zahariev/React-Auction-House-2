@@ -3,7 +3,7 @@ import { ErrorContext } from '../../context/ErrorContext';
 
 export default function Error() {
     const { error } = useContext(ErrorContext);
-    console.log(error);
+
     if (Array.isArray(error)) {
         return (
             <div className="error-box">
