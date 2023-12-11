@@ -1,4 +1,4 @@
-import { lazy } from 'react';
+import { Suspense, lazy } from 'react';
 import { Route, Routes } from 'react-router-dom';
 
 import { AuthProvider } from './context/AuthContext';
@@ -20,6 +20,8 @@ import CreateItem from './component/action/CreateComponent';
 import { GuestGuard } from './guards/GuestGuard';
 import { AuthGuard } from './guards/UserGuard';
 import ErrorBoundary from './guards/errorboundary';
+import UserClosedOffers from './component/closed-offers/UserClosedOffersComponent';
+import Spinner from './component/common/Spinner';
 
 const Catalog = lazy(() => import('./component/common/catalog/CatalogComponent'));
 
@@ -33,27 +35,30 @@ function App() {
           <Error />
           <main>
             <ErrorBoundary fallback={<div>Failed to fetch data!</div>} >
-              <Routes>
+              <Suspense fallback={<Spinner />}>
+                <Routes>
 
-                <Route path='/' element={<Home />} />
-                <Route path='/catalog' element={<Catalog />} />
-                <Route path='/details/:id' element={<Details />} />
+                  <Route path='/' element={<Home />} />
+                  <Route path='/catalog' element={<Catalog />} />
+                  <Route path='/details/:id' element={<Details />} />
 
-                <Route element={<GuestGuard />}>
-                  <Route path='/register' element={<Register />} />
-                  <Route path='/login' element={<Login />} />
-                </Route>
+                  <Route element={<GuestGuard />}>
+                    <Route path='/register' element={<Register />} />
+                    <Route path='/login' element={<Login />} />
+                  </Route>
 
-                <Route path='/logout' element={<Logout />} />
+                  <Route path='/logout' element={<Logout />} />
 
-                <Route element={<AuthGuard />}>
-                  <Route path='/edit/:id' element={<Edit />} />
-                  <Route path='/create' element={<CreateItem />} />
-                </Route>
+                  <Route element={<AuthGuard />}>
+                    <Route path='/edit/:id' element={<Edit />} />
+                    <Route path='/create' element={<CreateItem />} />
+                    <Route path='/closed' element={<UserClosedOffers />} />
+                  </Route>
 
-                <Route path='*' element={<Default />} />
+                  <Route path='*' element={<Default />} />
 
-              </Routes>
+                </Routes>
+              </Suspense>
             </ErrorBoundary>
           </main>
           <footer>SoftUni &copy; 2023 React Exam</footer>
