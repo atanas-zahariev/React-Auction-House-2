@@ -10,6 +10,7 @@ import { ErrorProvider } from './context/ErrorContext';
 import Logout from './component/auth/LogoutComponent';
 import Register from './component/auth/RegisterComponent';
 import Catalog from './component/common/catalog/CatalogComponent';
+import Details from './component/details/DetailsComponent';
 
 function App() {
 
@@ -26,6 +27,7 @@ function App() {
             <Route path='/login' element={<Login />} />
             <Route path='/logout' element={<Logout />} />
             <Route path='/catalog' element={<Catalog />} />
+            <Route path='/details/:id' element={<Details />} />
             <Route path='*' element={<Default />} />
           </Routes>
         </main>

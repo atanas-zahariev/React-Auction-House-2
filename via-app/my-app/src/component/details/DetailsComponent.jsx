@@ -4,6 +4,9 @@ import { useParams } from 'react-router-dom';
 import { ErrorContext } from '../../context/ErrorContext';
 
 import { useApi } from '../../hooks/dataService';
+import Owner from './OwnerComponent';
+import Spinner from '../common/Spinner';
+import NotOwner from './NotOwnerComponent';
 
 export default function Details(){
     const {id} = useParams();
@@ -15,7 +18,7 @@ export default function Details(){
     const getItem = async () => {
         try {
             const result = await getSpecificDataWithId(id);
-            setItem(item => ({...item,result}));
+            setItem(item => ({...item,...result}));
         } catch (error) {
             getError(error);
         }
@@ -23,8 +26,13 @@ export default function Details(){
 
     useEffect(() => {
         cleanError();
+        getItem();
         // eslint-disable-next-line
     }, []);
+
+    function setNewState({ updatedItem, user }) {
+        setItem(() => ({ item: { ...updatedItem }, user: { ...user } }));
+    }
 
     if (item.item) {
         const isOwner = item.item.owner === item.user?._id;
@@ -34,7 +42,7 @@ export default function Details(){
             );
         }
         return (
-            <NotOwner item={item} id={id}/>
+            <NotOwner item={item} setNewState={setNewState}/>
         );
     }
 

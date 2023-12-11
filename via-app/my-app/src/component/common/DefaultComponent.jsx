@@ -11,7 +11,7 @@ export const Default = () => {
                     The requested item doesn't exist
                 </p>
                 <div className="align-center">
-                    <Link class="action" to="/catalog">Back to catalog</Link>
+                    <Link className="action" to="/catalog">Back to catalog</Link>
                 </div>
             </div>
 

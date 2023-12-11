@@ -1,14 +1,17 @@
-import {  useState } from 'react';
+import { useContext, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
 
 import { getUser } from '../../services/utility';
 import { useApi } from '../../hooks/dataService';
+import { ErrorContext } from '../../context/ErrorContext';
 
 
 
 export default function Owner({ item }) {
     const navigate = useNavigate();
+
+    const { getError, cleanError } = useContext(ErrorContext);
 
     const [checkForUser, setCheck] = useState(false);
 
@@ -16,10 +19,15 @@ export default function Owner({ item }) {
 
     const { user } = item;
 
-    const {getUserAction} = useApi();
+    const { getUserAction,onDelete } = useApi();
 
     const onSubmit = async () => {
-
+        try {
+            await getUserAction(_id);
+            navigate('/closed');
+        } catch (error) {
+           getError(error);
+        }
     };
 
 
@@ -36,9 +44,9 @@ export default function Owner({ item }) {
             return;
         }
 
+        getError(`Delete/${title}/${_id}`);
+
     }
-
-
 
 
 
