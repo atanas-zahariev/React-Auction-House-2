@@ -22,6 +22,7 @@ import { AuthGuard } from './guards/UserGuard';
 import ErrorBoundary from './guards/errorboundary';
 import UserClosedOffers from './component/closed-offers/UserClosedOffersComponent';
 import Spinner from './component/common/Spinner';
+import Search from './component/action/SearchComponent';
 
 const Catalog = lazy(() => import('./component/common/catalog/CatalogComponent'));
 
@@ -41,6 +42,7 @@ function App() {
                   <Route path='/' element={<Home />} />
                   <Route path='/catalog' element={<Catalog />} />
                   <Route path='/details/:id' element={<Details />} />
+                  <Route path='/search' element={<Search />} />
 
                   <Route element={<GuestGuard />}>
                     <Route path='/register' element={<Register />} />

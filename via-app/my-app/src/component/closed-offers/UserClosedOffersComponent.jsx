@@ -15,7 +15,6 @@ export default function UserClosedOffers() {
     const getUserClosedOffers = async () => {
         try {
             const result = await getTotalAction();
-            console.log(result);
             setOffers(result.items);
         } catch (error) {
             getError(error);
@@ -28,8 +27,6 @@ export default function UserClosedOffers() {
         // eslint-disable-next-line
     }, []);
 
-    const { items } = offers;
-    console.log(offers);
     return (
         <section id="catalog-section" className="spaced">
 
