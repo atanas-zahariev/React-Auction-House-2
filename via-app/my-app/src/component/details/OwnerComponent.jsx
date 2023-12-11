@@ -11,7 +11,7 @@ import { ErrorContext } from '../../context/ErrorContext';
 export default function Owner({ item }) {
     const navigate = useNavigate();
 
-    const { getError, cleanError } = useContext(ErrorContext);
+    const { getError } = useContext(ErrorContext);
 
     const [checkForUser, setCheck] = useState(false);
 
@@ -26,7 +26,7 @@ export default function Owner({ item }) {
             await getUserAction(_id);
             navigate('/closed');
         } catch (error) {
-           getError(error);
+            getError(error);
         }
     };
 

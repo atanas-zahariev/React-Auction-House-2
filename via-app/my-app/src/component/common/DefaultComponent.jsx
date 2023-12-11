@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 
-export const Default = () => {
+export default function Default() {
     return (
         <section id="catalog-section" className="narrow align-center padded">
 
