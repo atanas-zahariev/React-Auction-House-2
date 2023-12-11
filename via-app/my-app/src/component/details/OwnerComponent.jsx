@@ -19,7 +19,7 @@ export default function Owner({ item }) {
 
     const { user } = item;
 
-    const { getUserAction,onDelete } = useApi();
+    const { getUserAction } = useApi();
 
     const onSubmit = async () => {
         try {
