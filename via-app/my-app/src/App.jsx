@@ -17,6 +17,10 @@ import Details from './component/details/DetailsComponent';
 import Edit from './component/action/EditItemComponent';
 import CreateItem from './component/action/CreateComponent';
 
+import { GuestGuard } from './guards/GuestGuard';
+import { AuthGuard } from './guards/UserGuard';
+import ErrorBoundary from './guards/errorboundary';
+
 const Catalog = lazy(() => import('./component/common/catalog/CatalogComponent'));
 
 function App() {
@@ -28,17 +32,29 @@ function App() {
           <Header />
           <Error />
           <main>
-            <Routes>
-              <Route path='/' element={<Home />} />
-              <Route path='/register' element={<Register />} />
-              <Route path='/login' element={<Login />} />
-              <Route path='/logout' element={<Logout />} />
-              <Route path='/catalog' element={<Catalog />} />
-              <Route path='/details/:id' element={<Details />} />
-              <Route path='/edit/:id' element={<Edit />} />
-              <Route path='/create' element={<CreateItem />} />
-              <Route path='*' element={<Default />} />
-            </Routes>
+            <ErrorBoundary fallback={<div>Failed to fetch data!</div>} >
+              <Routes>
+
+                <Route path='/' element={<Home />} />
+                <Route path='/catalog' element={<Catalog />} />
+                <Route path='/details/:id' element={<Details />} />
+
+                <Route element={<GuestGuard />}>
+                  <Route path='/register' element={<Register />} />
+                  <Route path='/login' element={<Login />} />
+                </Route>
+
+                <Route path='/logout' element={<Logout />} />
+
+                <Route element={<AuthGuard />}>
+                  <Route path='/edit/:id' element={<Edit />} />
+                  <Route path='/create' element={<CreateItem />} />
+                </Route>
+
+                <Route path='*' element={<Default />} />
+
+              </Routes>
+            </ErrorBoundary>
           </main>
           <footer>SoftUni &copy; 2023 React Exam</footer>
         </div>
