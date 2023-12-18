@@ -21,12 +21,10 @@ import Search from './component/action/SearchComponent';
 import { GuestGuard } from './guards/GuestGuard';
 import { AuthGuard } from './guards/UserGuard';
 import ErrorBoundary from './guards/errorboundary';
-
 import Spinner from './component/common/Spinner';
 
 const Catalog = lazy(() => import('./component/common/catalog/CatalogComponent'));
 const UserClosedOffers = lazy(() => import('./component/closed-offers/UserClosedOffersComponent'));
-
 function App() {
 
   return (
