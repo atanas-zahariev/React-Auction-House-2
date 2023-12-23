@@ -15,7 +15,7 @@ export default function NotOwner({ item, setNewState }) {
 
     const { offer } = useApi();
 
-    const { getError } = useContext(ErrorContext);
+    const { getError,cleanError } = useContext(ErrorContext);
 
     const setBider = async (data) => {
         data.oldPrice = item.item.price;
@@ -24,6 +24,7 @@ export default function NotOwner({ item, setNewState }) {
             validationHook(data);
             const result = await offer(data, _id);
             setNewState(result);
+            cleanError();
         } catch (error) {
             getError(error);
         }

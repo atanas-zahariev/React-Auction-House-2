@@ -16,12 +16,12 @@ import Register from './component/auth/RegisterComponent';
 import Details from './component/details/DetailsComponent';
 import Edit from './component/action/EditItemComponent';
 import CreateItem from './component/action/CreateComponent';
+import Search from './component/action/SearchComponent';
 
 import { GuestGuard } from './guards/GuestGuard';
 import { AuthGuard } from './guards/UserGuard';
 import ErrorBoundary from './guards/errorboundary';
 import Spinner from './component/common/Spinner';
-import Search from './component/action/SearchComponent';
 
 const Catalog = lazy(() => import('./component/common/catalog/CatalogComponent'));
 const UserClosedOffers = lazy(() => import('./component/closed-offers/UserClosedOffersComponent'));
