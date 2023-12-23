@@ -1,9 +1,10 @@
+/* eslint-disable testing-library/no-wait-for-side-effects */
 /* eslint-disable testing-library/no-container */
 /* eslint-disable testing-library/no-node-access */
 /* eslint-disable testing-library/no-unnecessary-act */
 /* eslint-disable testing-library/no-debugging-utils */
 import * as React from 'react';
-import { render, screen, waitFor,within } from '@testing-library/react';
+import { render, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { BrowserRouter } from 'react-router-dom';
 import App from '../App';
@@ -137,38 +138,69 @@ describe('changes in the Dom', () => {
   });
 
   it('test for appearance of the catalog', async () => {
-    
-    const {container} = render(
+
+    const { container } = render(
       <BrowserRouter>
         <App />
       </BrowserRouter>
     );
 
     await act(async () => {
-      userEvent.click(screen.getByRole('link',{name:'Browse'}));
+      userEvent.click(screen.getByRole('link', { name: 'Browse' }));
     });
 
     await waitFor(() => {
-      const images  = screen.getAllByRole('img');
+      const images = screen.getAllByRole('img');
       expect(images).toHaveLength(5);
     });
 
     await waitFor(() => {
-      const element  = screen.getAllByRole('list')[1];
+      const element = screen.getAllByRole('list')[1];
       expect(element).toHaveClass('catalog cards');
     });
 
     await waitFor(() => {
-      const elements  = container.getElementsByClassName('item');
+      const elements = container.getElementsByClassName('item');
       expect(elements.length).toBe(4);
     });
 
     await waitFor(() => {
-      const ulForlistItems  = screen.getAllByRole('list')[1];
+      const ulForlistItems = screen.getAllByRole('list')[1];
       const listItems = within(ulForlistItems).getAllByRole('listitem');
       expect(listItems).toHaveLength(4);
     });
 
+  });
+
+
+  it('test for details show up without user', async () => {
+    const { container } = render(
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
+    );
+    await act(async () => {
+      userEvent.click(screen.getByRole('link', { name: 'Browse' }));
+    });
+
+    await waitFor(async () => {
+      const ulForlistItems = screen.getAllByRole('list')[1];
+      const listItems = within(ulForlistItems).getAllByRole('listitem')[0];
+      const linkForDetails = within(listItems).getByRole('link', { name: 'See details' });
+      expect(linkForDetails).toBeInTheDocument();
+      userEvent.click(linkForDetails);
+
+      await waitFor(async () => {
+         const detailsHeader = screen.getByText('Car to push?!');
+         expect(detailsHeader).toBeInTheDocument();
+      });
+
+    });
+
+    await waitFor(async () => {
+      const detailsDivContainer = container.getElementsByClassName('item padded')[0];
+      expect(detailsDivContainer).toBeInTheDocument();
+    });
   });
 
 });
