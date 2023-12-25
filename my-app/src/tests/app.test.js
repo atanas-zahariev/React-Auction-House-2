@@ -98,11 +98,9 @@ describe('changes in the Dom', () => {
     const element = screen.getByText('All fields are required.');
 
     expect(element).toBeInTheDocument();
-    // screen.debug();
-
   });
 
-  it('test for changes in nav when user login.', async () => {
+  it('test for changes in nav when user login and logout.', async () => {
 
     render(
       <BrowserRouter>
@@ -134,6 +132,15 @@ describe('changes in the Dom', () => {
 
     await waitFor(() => {
       expect(screen.getByText('Logout')).toBeInTheDocument();
+    });
+
+    await act(async () => {
+      userEvent.click(screen.getByRole('link', { name: 'Logout' }));
+    });
+
+    await waitFor(() => {
+      const loginLink = screen.getByRole('link',{name:'Login'});
+      expect(loginLink).toBeInTheDocument();
     });
   });
 
@@ -171,28 +178,36 @@ describe('changes in the Dom', () => {
     });
 
   });
+});
 
-
+describe('test details', () => {
   it('test for details show up without user', async () => {
     const { container } = render(
       <BrowserRouter>
         <App />
       </BrowserRouter>
     );
-    await act(async () => {
-      userEvent.click(screen.getByRole('link', { name: 'Browse' }));
+    const catalogButton = screen.getByRole('link', { name: 'Browse' });
+    expect(catalogButton).toBeInTheDocument();
+
+    act(() => {
+      userEvent.click(catalogButton);
     });
 
     await waitFor(async () => {
-      const ulForlistItems = screen.getAllByRole('list')[1];
-      const listItems = within(ulForlistItems).getAllByRole('listitem')[0];
-      const linkForDetails = within(listItems).getByRole('link', { name: 'See details' });
-      expect(linkForDetails).toBeInTheDocument();
-      userEvent.click(linkForDetails);
+      const ulList = screen.getAllByRole('list');
 
-      await waitFor(async () => {
-         const detailsHeader = screen.getByText('Car to push?!');
-         expect(detailsHeader).toBeInTheDocument();
+      const item = within(ulList[1]).queryAllByRole('listitem')[0];
+
+      const detailsLink = within(item).getByRole('link', { name: 'See details' });
+
+      expect(detailsLink).toHaveClass('action');
+
+      userEvent.click(detailsLink);
+
+      await waitFor(() => {
+        const category = screen.getByText('vehicles');
+        expect(category).toBeInTheDocument();
       });
 
     });
@@ -203,4 +218,48 @@ describe('changes in the Dom', () => {
     });
   });
 
+
+  it('test for details show up with user how is not Owner and is hire bider.', async () => {
+    render(
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
+    );
+    await act(async () => {
+      userEvent.click(screen.getByRole('link', { name: 'Login' }));
+    });
+
+    const email = screen.getByRole('textbox');
+    const password = screen.getByLabelText('Password');
+
+    await act(async () => {
+      userEvent.type(email, 'peter@abv.bg');
+      userEvent.type(password, '123456');
+      userEvent.click(screen.getByText('Sign In'));
+    });
+
+    await waitFor(async () => {
+      const catalogButton = screen.getByRole('link', { name: 'Browse Listings' });
+
+      userEvent.click(catalogButton);
+
+      await waitFor(async () => {
+        const ulList = screen.getAllByRole('list')[1];
+
+        const item = within(ulList).getAllByRole('listitem')[0];
+
+        const detailsButton = within(item).getByRole('link', { name: 'See details' });
+
+        userEvent.click(detailsButton);
+
+        await waitFor(() => {
+          const isHighestBider = screen.getByText('highest bidder');
+          expect(isHighestBider).toBeInTheDocument();
+        });
+
+      });
+
+    });
+
+  });
 });
