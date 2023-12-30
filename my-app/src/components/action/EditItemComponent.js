@@ -69,12 +69,12 @@ export default function EditItem() {
                         <div className="col aligned">
                             <label>
                                 <span>Title</span>
-                                <input type="text" name="title" value={oldItem.title} onChange={changeHandler} />
+                                <input type="text" name="title" defaultValue={item.title} onChange={changeHandler} />
                             </label>
 
                             <label>
                                 <span>Category</span>
-                                <select name="category" value={oldItem.category} onChange={changeHandler} >
+                                <select name="category" defaultValue={item.category} onChange={changeHandler} >
                                     <option value="estate">Real Estate</option>
                                     <option value="vehicles">Vehicles</option>
                                     <option value="furniture">Furniture</option>
@@ -85,13 +85,13 @@ export default function EditItem() {
 
                             <label>
                                 <span>Image URL</span>
-                                <input type="text" name="imgUrl" value={oldItem.imgUrl} onChange={changeHandler} />
+                                <input type="text" name="imgUrl" defaultValue={item.imgUrl} onChange={changeHandler} />
                             </label>
 
                             <label>
                                 <span>Starting price</span>
                                 <input type="number" name="price"
-                                    value={oldItem.price}
+                                    defaultValue={item.price}
                                     onChange={changeHandler}
                                     disabled={(oldItem.bider) ? 'disabled' : ''} />
                             </label>
@@ -100,7 +100,7 @@ export default function EditItem() {
                         <div className="content pad-med align-center vertical">
                             <label>
                                 <span>Description</span>
-                                <textarea name="description" value={oldItem.description} onChange={changeHandler}></textarea>
+                                <textarea name="description" defaultValue={item.description} onChange={changeHandler}></textarea>
                             </label>
 
                             <div className="align-center">
