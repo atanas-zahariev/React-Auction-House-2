@@ -189,21 +189,25 @@ describe('test details', () => {
 
                 await waitFor(async () => {
                     expect(ulList).not.toBeInTheDocument();
+
                     const editLink = screen.getByRole('link', { name: 'Edit' });
 
                     userEvent.click(editLink);
 
                     await waitFor(async () => {
                         expect(editLink).not.toBeInTheDocument();
+
                         const title = screen.getByLabelText('Title');
+
                         const updateButton = screen.getByText('Update Listing');
 
                         userEvent.clear(title);
                         
-                        userEvent.type(title, 'Title!');
+                        userEvent.type(title, 'Car for real driver!');
 
                         await waitFor(async () => {
-                            expect(title).toHaveValue('Title!');
+                            expect(title).toHaveValue('Car for real driver!');
+
                             userEvent.click(updateButton);
 
                             await waitFor(async () => {
