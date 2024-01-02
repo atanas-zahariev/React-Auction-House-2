@@ -304,70 +304,200 @@ describe('test details', () => {
 
     });
 
-    it('test for details  with user how is not Owner and make offer.', async () => {
-        //for this test it is necessary to check the database, otherwise it will return an error, which would also affect the other tests.
-        const { container } = render(
-            <BrowserRouter>
-                <App />
-            </BrowserRouter>
-        );
-        await act(async () => {
-            userEvent.click(screen.getByRole('link', { name: 'Login' }));
-        });
+    // it('test for details  with user how is not Owner and make offer.', async () => {
+    //     //for this test it is necessary to check the database, otherwise it will return an error, which would also affect the other tests.
+    //     const { container } = render(
+    //         <BrowserRouter>
+    //             <App />
+    //         </BrowserRouter>
+    //     );
+    //     await act(async () => {
+    //         userEvent.click(screen.getByRole('link', { name: 'Login' }));
+    //     });
 
-        const email = screen.getByRole('textbox');
-        const password = screen.getByLabelText('Password');
+    //     const email = screen.getByRole('textbox');
+    //     const password = screen.getByLabelText('Password');
 
-        await act(async () => {
-            userEvent.type(email, 'peter@abv.bg');
-            userEvent.type(password, '123456');
-            userEvent.click(screen.getByText('Sign In'));
-        });
+    //     await act(async () => {
+    //         userEvent.type(email, 'peter@abv.bg');
+    //         userEvent.type(password, '123456');
+    //         userEvent.click(screen.getByText('Sign In'));
+    //     });
 
-        await waitFor(async () => {
-            const catalogButton = screen.getByRole('link', { name: 'Browse Listings' });
+    //     await waitFor(async () => {
+    //         const catalogButton = screen.getByRole('link', { name: 'Browse Listings' });
 
-            userEvent.click(catalogButton);
+    //         userEvent.click(catalogButton);
 
-            await waitFor(async () => {
-                const ulList = screen.getAllByRole('list')[1];
+    //         await waitFor(async () => {
+    //             const ulList = screen.getAllByRole('list')[1];
 
-                const item = within(ulList).getAllByRole('listitem')[3];
+    //             const item = within(ulList).getAllByRole('listitem')[3];
 
-                const detailsButton = within(item).getByRole('link', { name: 'See details' });
+    //             const detailsButton = within(item).getByRole('link', { name: 'See details' });
 
-                userEvent.click(detailsButton);
+    //             userEvent.click(detailsButton);
 
-                await waitFor(async () => {
-                    const placeBidButton = screen.getByText('Place bid');
+    //             await waitFor(async () => {
+    //                 const placeBidButton = screen.getByText('Place bid');
 
-                    expect(placeBidButton).toBeInTheDocument();
+    //                 expect(placeBidButton).toBeInTheDocument();
 
-                    const bidAmount = screen.getByRole('spinbutton');
+    //                 const bidAmount = screen.getByRole('spinbutton');
 
-                    const currentPrice = container.getElementsByTagName('strong')[1];
+    //                 const currentPrice = container.getElementsByTagName('strong')[1];
 
-                    userEvent.type(bidAmount, String(Number(currentPrice.textContent) + Number('1')));
-                    userEvent.click(placeBidButton);
+    //                 userEvent.type(bidAmount, String(Number(currentPrice.textContent) + Number('1')));
+    //                 userEvent.click(placeBidButton);
 
-                    await waitFor(async () => {
-                        expect(placeBidButton).not.toBeInTheDocument();
-                        screen.debug();
-                    });
-                });
+    //                 await waitFor(async () => {
+    //                     expect(placeBidButton).not.toBeInTheDocument();
+    //                     screen.debug();
+    //                 });
+    //             });
 
-            });
+    //         });
 
-        });
+    //     });
 
-        await act(async () => {
-            userEvent.click(screen.getByRole('link', { name: 'Logout' }));
-        });
+    //     await act(async () => {
+    //         userEvent.click(screen.getByRole('link', { name: 'Logout' }));
+    //     });
 
-        await waitFor(() => {
-            const loginLink = screen.getByRole('link', { name: 'Login' });
-            expect(loginLink).toBeInTheDocument();
-        });
+    //     await waitFor(() => {
+    //         const loginLink = screen.getByRole('link', { name: 'Login' });
+    //         expect(loginLink).toBeInTheDocument();
+    //     });
 
-    });
+    // });
+
+    // it('test for details  with user how is Owner and there is a buyer then close offer.', async () => {
+    //  //for this test it is necessary to check the database, otherwise it will return an error, which would also affect the other tests.
+    //     const { container } = render(
+    //         <BrowserRouter>
+    //             <App />
+    //         </BrowserRouter>
+    //     );
+    //     await act(async () => {
+    //         userEvent.click(screen.getByRole('link', { name: 'Login' }));
+    //     });
+
+    //     const email = screen.getByRole('textbox');
+    //     const password = screen.getByLabelText('Password');
+
+    //     await act(async () => {
+    //         userEvent.type(email, 'peter@abv.bg');
+    //         userEvent.type(password, '123456');
+    //         userEvent.click(screen.getByText('Sign In'));
+    //     });
+
+    //     await waitFor(async () => {
+    //         const catalogButton = screen.getByRole('link', { name: 'Browse Listings' });
+
+    //         userEvent.click(catalogButton);
+
+    //         await waitFor(async () => {
+    //             const ulList = screen.getAllByRole('list')[1];
+
+    //             const item = within(ulList).getAllByRole('listitem')[1];
+
+    //             const detailsButton = within(item).getByRole('link', { name: 'See details' });
+
+    //             userEvent.click(detailsButton);
+
+    //             await waitFor(async () => {
+    //                 const closeActionLink = screen.getByRole('link', { name: 'Close Auction' });
+    //                 expect(closeActionLink).toBeInTheDocument();
+
+    //                 userEvent.click(closeActionLink);
+
+    //                 await waitFor(async () => {
+    //                     const userClosedOffers = container.getElementsByTagName('ul')[1];
+    //                     expect(userClosedOffers).toBeInTheDocument();
+    //                     screen.debug(userClosedOffers);
+    //                 },{timeout:4000});
+    //             });
+
+    //         });
+
+    //     });
+
+    //     await act(async () => {
+    //         userEvent.click(screen.getByRole('link', { name: 'Logout' }));
+    //     });
+
+    //     await waitFor(() => {
+    //         const catalogLink = screen.getByRole('link', { name: 'Browse Listings' });
+    //         expect(catalogLink).toBeInTheDocument();
+    //     });
+    // });
+
+    // it('test for details delete item functionality .', async () => {
+    //    //for this test it is necessary to check the database, otherwise it will return an error, which would also affect the other tests.
+    //     const { container } = render(
+    //         <BrowserRouter>
+    //             <App />
+    //         </BrowserRouter>
+    //     );
+
+    //     await act(async () => {
+    //         userEvent.click(screen.getByRole('link', { name: 'Login' }));
+    //     });
+
+    //     const email = screen.getByRole('textbox');
+    //     const password = screen.getByLabelText('Password');
+
+    //     await act(async () => {
+    //         userEvent.type(email, 'peter@abv.bg');
+    //         userEvent.type(password, '123456');
+    //         userEvent.click(screen.getByText('Sign In'));
+    //     });
+
+    //     await waitFor(async () => {
+    //         const catalogLink = screen.getByRole('link', { name: 'Browse Listings' });
+    //         expect(catalogLink).toBeInTheDocument();
+
+    //         userEvent.click(catalogLink);
+
+    //         await waitFor(async () => {
+    //             const ulList = container.getElementsByClassName('catalog cards')[0];
+    //             const detailsLink = within(ulList).getAllByRole('link', { name: 'See details' })[1];
+
+    //             userEvent.click(detailsLink);
+
+    //             await waitFor(async () => {
+    //                 expect(ulList).not.toBeInTheDocument();
+
+    //                 const deleteLink = screen.getByRole('link', { name: 'Delete' });
+
+    //                 userEvent.click(deleteLink);
+
+    //                 await waitFor(async () => {
+    //                     const errorBox = container.getElementsByClassName('error-box')[0];
+    //                     const confirmButton = within(errorBox).getByRole('button', { name: 'Confirm' });
+    //                     expect(confirmButton).toBeInTheDocument();
+
+    //                     userEvent.click(confirmButton);
+
+    //                     await waitFor(async () => {
+    //                         const catalogList = container.getElementsByTagName('ul')[1];
+    //                         expect(catalogList).toBeInTheDocument();
+    //                         screen.debug(catalogList);
+    //                     });
+    //                 });
+    //             });
+
+    //         });
+    //     });
+
+    //     await act(async () => {
+    //         userEvent.click(screen.getByRole('link', { name: 'Logout' }));
+    //     });
+
+    //     await waitFor(() => {
+    //         const catalogLink = screen.getByRole('link', { name: 'Browse Listings' });
+    //         expect(catalogLink).toBeInTheDocument();
+    //     });
+
+    // });
 });
